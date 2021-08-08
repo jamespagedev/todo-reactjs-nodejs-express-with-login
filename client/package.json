@@ -1,0 +1,65 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "description": "reactjs front-end for todo app.",
+  "private": true,
+  "keywords": [],
+  "author": "James C Page",
+  "license": "MIT",
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "axios": "^0.21.1",
+    "concurrently": "^6.2.0",
+    "react": "^17.0.2",
+    "react-app-polyfill": "^2.0.0",
+    "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "dev": "cross-env NODE_ENV=dev npm start",
+    "devproxyserver": "cd ../proxyserver && nodemon index.js",
+    "devserver": "cd ../server && nodemon index.js",
+    "devfullstart": "concurrently \"cross-env NODE_ENV=dev npm run devserver\" \"cross-env NODE_ENV=dev npm run devproxyserver\" \"cross-env NODE_ENV=dev npm start\"",
+    "integfullstart": "concurrently \"cross-env NODE_ENV=dev npm run devserver\" \"cross-env NODE_ENV=dev npm run devproxyserver\" \"cross-env NODE_ENV=integ npm start\"",
+    "acptfullstart": "concurrently \"cross-env NODE_ENV=dev npm run devserver\" \"cross-env NODE_ENV=dev npm run devproxyserver\" \"cross-env NODE_ENV=acpt npm start\"",
+    "prodfullstart": "concurrently \"cross-env NODE_ENV=dev npm run devserver\" \"cross-env NODE_ENV=dev npm run devproxyserver\" \"cross-env NODE_ENV=prod npm start\"",
+    "deployfullstart": "concurrently \"cross-env NODE_ENV=dev npm run devserver\" \"cross-env NODE_ENV=dev npm run devproxyserver\" \"cross-env NODE_ENV=deploy npm start\""
+  },
+  "proxy": "http://localhost:5001",
+  "reactSnap": {
+    "puppeteerIgnoreHTTPSErrors": true
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamespagedev/todo-reactjs-nodejs-express-with-login.git"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all",
+      "ie 11"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version",
+      "ie 11"
+    ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
+}
