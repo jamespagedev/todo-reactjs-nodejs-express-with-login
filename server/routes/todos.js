@@ -18,8 +18,26 @@ const { authenticate } = require('../config/middleware/auth.js');
 /*=======================================================*/
 router.get('/:userId', authenticate, async(req, res, next) => {
   try {
-    const userId = req.params.userId;
+    const userId = Number(req.params.userId);
     res.status(200).json(userToDos[userId]);
+  } catch(err) {
+    (err.errDetails) ? next(err.errDetails) : next(err);
+  }
+});
+
+router.get('/:userId/:toDoId', authenticate, async(req, res, next) => {
+  try {
+    const userId = Number(req.params.userId);
+    const toDoId = Number(req.params.toDoId);
+    const toDoIdIndex = userToDos[userId].findIndex(todo => {
+      return todo.id === toDoId
+    });
+    if(toDoIdIndex > -1) {
+      res.status(200).json(userToDos[userId][toDoIdIndex]);
+    } else {
+      const errDetails = {code: 400, uniqueMessage: 'todo not found'};
+      throw { errDetails };
+    }
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);
   }
@@ -28,7 +46,7 @@ router.get('/:userId', authenticate, async(req, res, next) => {
 router.post('/:userId', authenticate, async(req, res, next) => {
   try {
     // ToDo: Validation
-    const userId = req.params.userId;
+    const userId = Number(req.params.userId);
     const details = req.body.details;
     const newToDo = {
       id: userToDos[userId].length === 0 ? 1 : userToDos[userId][userToDos[userId].length - 1].id + 1,
@@ -45,8 +63,8 @@ router.post('/:userId', authenticate, async(req, res, next) => {
 router.put('/:userId/:toDoId', authenticate, async(req, res, next) => {
   try {
     // ToDo: Validation
-    const userId = req.params.userId;
-    const toDoId = req.params.toDoId;
+    const userId = Number(req.params.userId);
+    const toDoId = Number(req.params.toDoId);
     const details = req.body.details;
     const toDoIdIndex = userToDos[userId].findIndex(todo => todo.id === toDoId);
     if(toDoIdIndex > -1) {
@@ -65,8 +83,8 @@ router.put('/:userId/:toDoId', authenticate, async(req, res, next) => {
 router.delete('/:userId/:toDoId', authenticate, async(req, res, next) => {
   try {
     // ToDo: Validation
-    const userId = req.params.userId;
-    const toDoId = req.params.toDoId;
+    const userId = Number(req.params.userId);
+    const toDoId = Number(req.params.toDoId);
     const toDoIdIndex = userToDos[userId].findIndex(todo => todo.id === toDoId);
     if(toDoIdIndex > -1) {
       userToDos[userId].splice(toDoIdIndex, 1);
