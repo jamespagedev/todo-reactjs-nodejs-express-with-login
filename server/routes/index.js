@@ -1,7 +1,7 @@
-const todos = require('./todos.js');
-const users = require('./users.js');
+const todosRoute = require('./todos.js');
+const usersRoute = require('./users.js');
 
 module.exports = {
-  todos,
-  users
+  todosRoute,
+  usersRoute
 }

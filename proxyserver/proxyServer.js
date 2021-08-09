@@ -20,15 +20,17 @@ const { errorHandler } = require('./config/middleware/errorHandler.js');
 /*======================== routes =======================*/
 /*=======================================================*/
 const {
-  users
-} = require('./routes/index.js');
+  todosRouter,
+  usersRouter
+} = require('./routers/index.js');
 
+/*---------------------- endpoints ----------------------*/
 proxyServer.get('/', (req, res) => {
   res.status(200).send('This is the proxy server');
 });
 
-/*---------------------- endpoints ----------------------*/
-proxyServer.use('/users', users);
+proxyServer.use(todosRouter);
+proxyServer.use(usersRouter);
 
 /*-------------------- error handler --------------------*/
 proxyServer.use(errorHandler); // This line must be after all endpoints

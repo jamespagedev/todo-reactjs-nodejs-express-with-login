@@ -20,17 +20,17 @@ const { errorHandler } = require('./config/middleware/errorHandler.js');
 /*======================== routes =======================*/
 /*=======================================================*/
 const {
-  todos,
-  users
+  todosRoute,
+  usersRoute
 } = require('./routes/index.js');
 
+/*---------------------- endpoints ----------------------*/
 server.get('/', (req, res) => {
   res.status(200).send('This is the back-end server');
 });
 
-/*---------------------- endpoints ----------------------*/
-server.use('/users', users);
-server.use('/todos', todos);
+server.use(todosRoute);
+server.use(usersRoute);
 
 /*-------------------- error handler --------------------*/
 server.use(errorHandler); // This line must be after all endpoints

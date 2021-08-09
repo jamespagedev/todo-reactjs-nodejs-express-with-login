@@ -5,7 +5,7 @@
 /*=======================================================*/
 /*====================== middleware =====================*/
 /*=======================================================*/
-const { router } = require('../config/middleware/middleware.js');
+const { router, routeNames } = require('../config/middleware/middleware.js');
 
 /*=======================================================*/
 /*==================== Authorization ====================*/
@@ -16,7 +16,7 @@ const { getNewToken } = require('../config/middleware/auth.js');
 /*=======================================================*/
 /*====================== endpoints ======================*/
 /*=======================================================*/
-router.post('/login', async(req, res, next) => {
+router.post(`/${routeNames.users}/login`, async(req, res, next) => {
   try {
     const userName = req.body.userName;
     const password = req.body.pswd;
@@ -34,6 +34,7 @@ router.post('/login', async(req, res, next) => {
 
     const token = await getNewToken();
     res.status(201).json({id: 1, name: userName, token: token});
+    next();
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);
   }
