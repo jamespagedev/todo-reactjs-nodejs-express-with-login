@@ -6,6 +6,7 @@
 /*====================== middleware =====================*/
 /*=======================================================*/
 // const { httpsAgent, router } = require('../config/middleware/middleware.js');
+const { isObjectEmpty } = require('../config/middleware/globals.js');
 const { axios, router } = require('../config/middleware/middleware.js');
 
 /*=======================================================*/
@@ -32,13 +33,11 @@ router.post('/login', async(req, res, next) => {
     // .catch(err => {
     //   throw err;
     // });
-    axios.post(`${process.env.BACKEND_SERVER}/users/login`, data)
-    .then(serverRes => res.status(201).json(serverRes.data))
-    .catch(err => {
-      throw err;
-    });
-    // res.status(201).json({id: 1, name: req.body.userName, token: "asdfdsf"});
+    // console.log('foo');
+    const serverRes = await axios.post(`${process.env.BACKEND_SERVER}/users/login`, data);
+    res.status(201).json(serverRes.data);
   } catch(err) {
+    // console.log(err.response.data);
     (err.errDetails) ? next(err.errDetails) : next(err);
   }
 });

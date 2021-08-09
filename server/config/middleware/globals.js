@@ -5,6 +5,10 @@
 /*=======================================================*/
 /*====================== Functions ======================*/
 /*=======================================================*/
+const isObjectEmpty = (obj) => {
+  return obj.constructor === Object && Object.keys(obj).length === 0;
+}
+
 const cloneObjByValue = (obj) => {
   let cloneValue;
 
@@ -39,5 +43,6 @@ const cloneObjByValue = (obj) => {
 }
 
 module.exports = {
+  isObjectEmpty,
   cloneObjByValue
 }

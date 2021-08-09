@@ -20,6 +20,7 @@ const { errorHandler } = require('./config/middleware/errorHandler.js');
 /*======================== routes =======================*/
 /*=======================================================*/
 const {
+  todos,
   users
 } = require('./routes/index.js');
 
@@ -29,6 +30,7 @@ server.get('/', (req, res) => {
 
 /*---------------------- endpoints ----------------------*/
 server.use('/users', users);
+server.use('/todos', todos);
 
 /*-------------------- error handler --------------------*/
 server.use(errorHandler); // This line must be after all endpoints
