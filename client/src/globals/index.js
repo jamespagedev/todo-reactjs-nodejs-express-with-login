@@ -5,7 +5,8 @@ import {
 import {
   proxyServer,
   guestUserId,
-  frontendLinks
+  frontendLinks,
+  backendRoutes
 } from './variables.js';
 
 import {
@@ -22,6 +23,7 @@ export {
   proxyServer,
   guestUserId,
   frontendLinks,
+  backendRoutes,
 
   // functions
   isBrowserIE,

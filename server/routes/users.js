@@ -26,7 +26,11 @@ router.post(`/${routeNames.users}/login`, async(req, res, next) => {
       const errDetails = {code: 400, uniqueMessage: 'invalid username/password'};
       throw { errDetails };
     }
-    const userIndex = users.findIndex(user => user.userName.toLowerCase() === userName.toLowerCase());
+    /* ToDo:  once validation is added with password stored as hash key in a database,
+              replace (userIndex = users.findIndex(...)) with method to validate username/password,
+              if (validation === true) then generate new token and give the front-end a response
+    */
+    const userIndex = users.findIndex(user => (user.userName.toLowerCase() === userName.toLowerCase() && user.password === password));
     if(userIndex === -1) {
       const errDetails = {code: 400, uniqueMessage: 'invalid username/password'};
       throw { errDetails };

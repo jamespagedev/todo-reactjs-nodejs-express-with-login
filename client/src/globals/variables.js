@@ -12,8 +12,18 @@ const frontendLinks = {
   home: "/"
 }
 
+const backendRoutes = {
+  users: {
+    login: 'users/login'
+  },
+  todos: {
+    all: 'todos'
+  }
+}
+
 export {
   proxyServer,
   guestUserId,
-  frontendLinks
+  frontendLinks,
+  backendRoutes
 }
