@@ -7,3 +7,16 @@
   width: 100%;
   background-color: rgba(0,0,0,0.7);
 }
+
+.g-header button {
+  padding: 8px 20px;
+  font-size: 2.1rem;
+  color: #ffffff;
+  background-color: #1e90ff;
+  border: none;
+  outline: none;
+}
+.g-header button:hover {
+  background-color: #1972c7;
+  cursor: pointer;
+}

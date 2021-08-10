@@ -22,7 +22,7 @@ const HomeLogin = () => {
     <div className="view">
       <HeaderGuest openLoginModal={openLoginModal} />
       <div className="view-container">
-        <h1>Please Log In</h1>
+        <h1 className="h1-login-msg">Please Log In</h1>
       </div>
       {!isLoggingIn && <ModalLogin modalData={modalData} setModalData={setModalData} />}
     </div>

@@ -1,6 +1,9 @@
 import { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
+// Components
+import ToDo from '../components/home/todo.js';
+
 // globals
 import { GlobalContext, proxyServer, backendRoutes } from '../globals/index.js';
 
@@ -19,11 +22,10 @@ const Home = () => {
   return (
     <div className="view">
       <div className="view-container">
+        <div className="input"></div>
         {!todos || todos.length === 0 ? <h1>No ToDo's Found</h1> :
           todos.map(todo =>
-            <div key={todo.id}>
-              <p>{todo.details}</p>
-            </div>
+            <ToDo key={todo.id} id={todo.id} details={todo.details} />
           )
         }
       </div>
