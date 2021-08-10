@@ -14,25 +14,29 @@ const Home = () => {
   const [todos, setTodos] = useState([]);
   const [newToDoText, setNewToDoText] = useState("");
   const [deleteModalData, setDeleteModalData] = useState({isOpen: false, id: 0, details: ""});
+  const [addFormValidate, setAddFormValidate] = useState({isError: false, errMsg: ""});
 
   // functions
   const addButtonHandler = (ev) => {
     ev.preventDefault();
-    const data = {
-      details: newToDoText
-    }
-    console.log("ADD newToDoText:", newToDoText);
-    axios.post(`${proxyServer}/${backendRoutes.todos.add}/${globalBackendData.userInfo.id}`, data)
-    .then(res => {
-      if(res.data > 0){
-        const copyOfToDos = cloneObjByValue(todos);
-        copyOfToDos.push({id: res.data, details: newToDoText})
-        setTodos(copyOfToDos);
+    if(newToDoText){
+      const data = {
+        details: newToDoText
       }
-    })
-    .then(() => setNewToDoText(""))
-    .then(() => console.log('new todos:', todos))
-    .catch(err => console.log(err)); // <-- todo: create error modal
+      axios.post(`${proxyServer}/${backendRoutes.todos.add}/${globalBackendData.userInfo.id}`, data)
+      .then(res => {
+        if(res.data > 0){
+          const copyOfToDos = cloneObjByValue(todos);
+          copyOfToDos.push({id: res.data, details: newToDoText})
+          setTodos(copyOfToDos);
+        }
+      })
+      .then(() => setNewToDoText(""))
+      .catch(err => console.log(err)); // <-- todo: create error modal
+    } else {
+      Promise.resolve(setAddFormValidate({isError: true, errMsg: "To Do must have text before being added to the list."})) // <-- todo: create error modal
+      .then(() => console.log("error:", addFormValidate.errMsg));
+    }
   }
 
   const deleteToDo = (id) => {
