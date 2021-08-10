@@ -17,7 +17,8 @@ const backendRoutes = {
     login: 'users/login'
   },
   todos: {
-    all: 'todos'
+    all: 'todos',
+    add: 'todos'
   }
 }
 

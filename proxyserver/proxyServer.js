@@ -14,6 +14,7 @@ proxyServer.use(helmet()); // hides your tech stack from sniffers
 proxyServer.use(express.json()); // built-in
 proxyServer.use(morgan('dev')); // logging middleware for console
 proxyServer.use(cors()); // allows specified/all domains/ports to connect to your server
+proxyServer.disable('etag'); // stops 304 cache returns
 const { errorHandler } = require('./config/middleware/errorHandler.js');
 
 /*=======================================================*/

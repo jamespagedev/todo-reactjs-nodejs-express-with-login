@@ -234,6 +234,47 @@ img {
   margin: 0 auto;
 }
 /*===================== HOME =====================*/
+.form-home-add-todo {
+  display: flex;
+  margin: 0 auto 40px;
+  width: 100%;
+  max-width: 800px;
+  border: 2px solid black;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+}
+.form-home-add-todo textarea {
+  width: 100%;
+  padding: 5px 20px 5px 10px;
+  border: none;
+  border-right: 2px solid black;
+  resize: none;
+  scrollbar-width: thin;
+  scrollbar-color: #d3d3d3 #ffffff;
+  outline: none;
+}
+.form-home-add-todo button {
+  width: 160px;
+  padding: 8px 10px;
+  font-size: 2.4rem;
+  background-color: #9afe2e;
+  border: none;
+  outline: none;
+}
+.form-home-add-todo button:hover {
+  background-color: #7fd226;
+  cursor: pointer;
+}
+.form-home-add-todo textarea::-webkit-scrollbar {
+  width: 11px;
+}
+.form-home-add-todo textarea::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+.form-home-add-todo textarea::-webkit-scrollbar-thumb {
+  background-color: #d3d3d3;
+  border-radius: 6px;
+  border: 3px solid #ffffff;
+}
 .home-todo {
   display: flex;
   margin-bottom: 20px;

@@ -2,6 +2,7 @@ const ToDo = (props) => {
   // variables
   const {id, details} = props;
 
+  // functions
   const editButtonHandler = (ev, toDoId) => {
     ev.preventDefault();
     console.log("Edit toDoId:", toDoId);
