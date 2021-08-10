@@ -75,7 +75,7 @@ router.delete(`/${routeNames.todos}/:userId/:toDoId`, authenticate, async(req, f
     const userId = req.params.userId;
     const toDoId = req.params.toDoId;
 
-    const backendRes = await axios.delete(`${process.env.BACKEND_SERVER}/todos/${userId}/${toDoId}`, data);
+    const backendRes = await axios.delete(`${process.env.BACKEND_SERVER}/todos/${userId}/${toDoId}`);
     frontendRes.status(200).json(backendRes.data);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);

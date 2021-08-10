@@ -17,8 +17,9 @@ const backendRoutes = {
     login: 'users/login'
   },
   todos: {
-    all: 'todos',
-    add: 'todos'
+    all: 'todos', // /:userId
+    add: 'todos', // /:userId
+    delete: 'todos' // /:userId/:toDoId
   }
 }
 

@@ -1,6 +1,6 @@
 const ToDo = (props) => {
   // variables
-  const {id, details} = props;
+  const {id, details, openDeleteToDoModal} = props;
 
   // functions
   const editButtonHandler = (ev, toDoId) => {
@@ -8,9 +8,9 @@ const ToDo = (props) => {
     console.log("Edit toDoId:", toDoId);
   }
 
-  const deleteButtonHandler = (ev, toDoId) => {
+  const deleteButtonHandler = (ev, toDoId, details) => {
     ev.preventDefault();
-    console.log("Delete toDoId:", toDoId);
+    openDeleteToDoModal({isOpen: true, id: toDoId, details: details});
   }
 
   return (
@@ -20,7 +20,7 @@ const ToDo = (props) => {
       </div>
       <div className="actions">
         <button className="edit" onClick={ev => editButtonHandler(ev, id)}>Edit</button>
-        <button className="delete" onClick={ev => deleteButtonHandler(ev, id)}>Delete</button>
+        <button className="delete" onClick={ev => deleteButtonHandler(ev, id, details)}>Delete</button>
       </div>
     </div>
   )

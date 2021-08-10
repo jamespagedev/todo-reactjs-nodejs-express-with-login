@@ -3,6 +3,7 @@ import axios from 'axios';
 
 // Components
 import ToDo from '../components/home/todo.js';
+import ModalDeleteToDo from '../components/modals/modalDeleteToDo.js';
 
 // globals
 import { GlobalContext, proxyServer, backendRoutes, cloneObjByValue } from '../globals/index.js';
@@ -10,8 +11,9 @@ import { GlobalContext, proxyServer, backendRoutes, cloneObjByValue } from '../g
 const Home = () => {
   // variables
   const { globalBackendData } = useContext(GlobalContext);
-  const [ todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState([]);
   const [newToDoText, setNewToDoText] = useState("");
+  const [deleteModalData, setDeleteModalData] = useState({isOpen: false, id: 0, details: ""});
 
   // functions
   const addButtonHandler = (ev) => {
@@ -30,7 +32,21 @@ const Home = () => {
     })
     .then(() => setNewToDoText(""))
     .then(() => console.log('new todos:', todos))
-    .catch(err => console.log(err))
+    .catch(err => console.log(err)); // <-- todo: create error modal
+  }
+
+  const deleteToDo = (id) => {
+    axios.delete(`${proxyServer}/${backendRoutes.todos.delete}/${globalBackendData.userInfo.id}/${id}`)
+    .then(res => {
+      if(res.data > 0){
+        const deletedId = res.data;
+        const copyOfToDos = cloneObjByValue(todos);
+        const deletedIdIndex = copyOfToDos.findIndex(todo => todo.id === deletedId);
+        copyOfToDos.splice(deletedIdIndex, 1);
+        setTodos(copyOfToDos);
+      }
+    })
+    .catch(err => console.log(err)); // <-- todo: create error modal
   }
 
   // setup
@@ -49,10 +65,11 @@ const Home = () => {
         </form>
         {!todos || todos.length === 0 ? <h1>No ToDo's Found</h1> :
           todos.map(todo =>
-            <ToDo key={todo.id} id={todo.id} details={todo.details} />
+            <ToDo key={todo.id} id={todo.id} details={todo.details} openDeleteToDoModal={setDeleteModalData} />
           )
         }
       </div>
+      <ModalDeleteToDo modalData={deleteModalData} deleteToDo={deleteToDo} setModalData={setDeleteModalData} />
     </div>
   )
 }
