@@ -25,9 +25,9 @@ const { createServer } = require('http'); // use this until certs are created to
 const cacheUserTokenInfo = {};
 const authHeadersUserIdIndex = 0;
 const authHeadersTokenIndex = 1;
-const routeNames = {
-  todos: 'todos',
-  users: 'users'
+const routerNames = {
+  todos: '/todos',
+  users: '/users'
 }
 
 module.exports = {
@@ -41,5 +41,5 @@ module.exports = {
   cacheUserTokenInfo,
   authHeadersUserIdIndex,
   authHeadersTokenIndex,
-  routeNames
+  routerNames
 }

@@ -13,8 +13,8 @@ const Home = () => {
   const { globalBackendData } = useContext(GlobalContext);
   const [todos, setTodos] = useState([]);
   const [newToDoText, setNewToDoText] = useState("");
-  const [deleteModalData, setDeleteModalData] = useState({isOpen: false, id: 0, details: ""});
   const [addFormValidate, setAddFormValidate] = useState({isError: false, errMsg: ""});
+  const [deleteModalData, setDeleteModalData] = useState({isOpen: false, id: 0, details: ""});
 
   // functions
   const addButtonHandler = (ev) => {
@@ -37,6 +37,21 @@ const Home = () => {
       Promise.resolve(setAddFormValidate({isError: true, errMsg: "To Do must have text before being added to the list."})) // <-- todo: create error modal
       .then(() => console.log("error:", addFormValidate.errMsg));
     }
+  }
+
+  const editToDo = (id, details) => {
+    const data = { details: details }
+    axios.put(`${proxyServer}/${backendRoutes.todos.edit}/${globalBackendData.userInfo.id}/${id}`, data)
+    .then(res => {
+      if(res.data.id > 0){
+        const editedToDo = res.data;
+        const copyOfToDos = cloneObjByValue(todos);
+        const toDoIdIndex = copyOfToDos.findIndex(todo => todo.id === editedToDo.id);
+        copyOfToDos[toDoIdIndex] = editedToDo;
+        setTodos(copyOfToDos);
+      }
+    })
+    .catch(err => console.log(err)); // <-- todo: create error modal
   }
 
   const deleteToDo = (id) => {
@@ -65,11 +80,11 @@ const Home = () => {
       <div className="view-container">
         <form className="form-home-add-todo">
           <textarea rows="4" placeholder="Enter todo task here..." value={newToDoText} onChange={ev => setNewToDoText(ev.target.value)} />
-          <button onClick={ev => addButtonHandler(ev)}>Add To Do</button>
+          <button className={newToDoText ? "add" : "disabled"} onClick={ev => addButtonHandler(ev)}>Add To Do</button>
         </form>
         {!todos || todos.length === 0 ? <h1>No ToDo's Found</h1> :
           todos.map(todo =>
-            <ToDo key={todo.id} id={todo.id} details={todo.details} openDeleteToDoModal={setDeleteModalData} />
+            <ToDo key={todo.id} id={todo.id} details={todo.details} editToDo={editToDo} deleteToDoModal={setDeleteModalData} />
           )
         }
       </div>

@@ -6,7 +6,7 @@
 /*====================== middleware =====================*/
 /*=======================================================*/
 // const { httpsAgent, router } = require('../config/middleware/middleware.js');
-const { axios, router, routeNames } = require('../config/middleware/middleware.js');
+const { axios, router, routerNames } = require('../config/middleware/middleware.js');
 
 /*=======================================================*/
 /*==================== Authorization ====================*/
@@ -15,7 +15,7 @@ const { axios, router, routeNames } = require('../config/middleware/middleware.j
 /*=======================================================*/
 /*======================== routes =======================*/
 /*=======================================================*/
-router.post(`/${routeNames.users}/login`, async(req, frontendRes, next) => {
+router.post(`${routerNames.users}/login`, async(req, frontendRes, next) => {
   try {
     const data = req.body;
     if (!data.userName || data.userName === undefined || data.userName === null || data.userName === '' ||

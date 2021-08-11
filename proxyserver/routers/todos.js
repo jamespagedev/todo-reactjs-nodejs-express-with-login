@@ -5,7 +5,7 @@
 /*=======================================================*/
 /*====================== middleware =====================*/
 /*=======================================================*/
-const { axios, router, routeNames } = require('../config/middleware/middleware.js');
+const { axios, router, routerNames } = require('../config/middleware/middleware.js');
 
 /*=======================================================*/
 /*==================== Authorization ====================*/
@@ -15,7 +15,7 @@ const { authenticate } = require('../config/middleware/auth.js');
 /*=======================================================*/
 /*======================== routes =======================*/
 /*=======================================================*/
-router.get(`/${routeNames.todos}/:userId`, authenticate, async(req, frontendRes, next) => {
+router.get(`${routerNames.todos}/:userId`, authenticate, async(req, frontendRes, next) => {
   try {
     const userId = req.params.userId;
 
@@ -26,7 +26,7 @@ router.get(`/${routeNames.todos}/:userId`, authenticate, async(req, frontendRes,
   }
 });
 
-router.get(`/${routeNames.todos}/:userId/:toDoId`, authenticate, async(req, frontendRes, next) => {
+router.get(`${routerNames.todos}/:userId/:toDoId`, authenticate, async(req, frontendRes, next) => {
   try {
     const userId = req.params.userId;
     const toDoId = req.params.toDoId;
@@ -38,7 +38,7 @@ router.get(`/${routeNames.todos}/:userId/:toDoId`, authenticate, async(req, fron
   }
 });
 
-router.post(`/${routeNames.todos}/:userId`, authenticate, async(req, frontendRes, next) => {
+router.post(`${routerNames.todos}/:userId`, authenticate, async(req, frontendRes, next) => {
   try {
     // ToDo: Validation
     const userId = req.params.userId;
@@ -53,7 +53,7 @@ router.post(`/${routeNames.todos}/:userId`, authenticate, async(req, frontendRes
   }
 });
 
-router.put(`/${routeNames.todos}/:userId/:toDoId`, authenticate, async(req, frontendRes, next) => {
+router.put(`${routerNames.todos}/editToDoReturnId/:userId/:toDoId`, authenticate, async(req, frontendRes, next) => {
   try {
     // ToDo: Validation
     const userId = req.params.userId;
@@ -62,14 +62,30 @@ router.put(`/${routeNames.todos}/:userId/:toDoId`, authenticate, async(req, fron
       details: req.body.details
     };
 
-    const backendRes = await axios.put(`${process.env.BACKEND_SERVER}/todos/${userId}/${toDoId}`, data);
+    const backendRes = await axios.put(`${process.env.BACKEND_SERVER}/todos/editToDoReturnId/${userId}/${toDoId}`, data);
     frontendRes.status(202).json(backendRes.data);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);
   }
 });
 
-router.delete(`/${routeNames.todos}/:userId/:toDoId`, authenticate, async(req, frontendRes, next) => {
+router.put(`${routerNames.todos}/editToDoReturnToDo/:userId/:toDoId`, authenticate, async(req, frontendRes, next) => {
+  try {
+    // ToDo: Validation
+    const userId = req.params.userId;
+    const toDoId = req.params.toDoId;
+    const data = {
+      details: req.body.details
+    };
+
+    const backendRes = await axios.put(`${process.env.BACKEND_SERVER}/todos/editToDoReturnToDo/${userId}/${toDoId}`, data);
+    frontendRes.status(202).json(backendRes.data);
+  } catch(err) {
+    (err.errDetails) ? next(err.errDetails) : next(err);
+  }
+});
+
+router.delete(`${routerNames.todos}/:userId/:toDoId`, authenticate, async(req, frontendRes, next) => {
   try {
     // ToDo: Validation
     const userId = req.params.userId;

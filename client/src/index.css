@@ -256,13 +256,19 @@ img {
   width: 160px;
   padding: 8px 10px;
   font-size: 2.4rem;
-  background-color: #9afe2e;
   border: none;
   outline: none;
 }
-.form-home-add-todo button:hover {
-  background-color: #7fd226;
+.form-home-add-todo .add {
+  background-color: #ffe505;
+}
+.form-home-add-todo .add:hover {
+  background-color: #ffc905;
   cursor: pointer;
+}
+.form-home-add-todo .disabled {
+  color: #020202;
+  background-color: #020202;
 }
 .form-home-add-todo textarea::-webkit-scrollbar {
   width: 11px;
@@ -303,15 +309,30 @@ img {
 .home-todo .p-details {
   padding: 5px 40px 5px 10px;
 }
+.home-todo .textarea-details {
+  width: 100%;
+  padding: 5px 40px 5px 10px;
+  border: none;
+  resize: none;
+  outline: none;
+}
+.home-todo .actions {
+  min-width: 116px;
+}
 .home-todo .actions button {
   width: 100%;
   height: 50px;
   padding: 10px;
   border: none;
-  color: white;
   outline: none;
 }
+.home-todo .disabled {
+  color: #020202;
+  font-weight: 700;
+  background-color: #020202;
+}
 .home-todo .edit {
+  color: #ffffff;
   background-color: #1e90ff;
 }
 .home-todo .edit:hover {
@@ -319,9 +340,28 @@ img {
   cursor: pointer;
 }
 .home-todo .delete {
+  color: #ffffff;
   background-color: #dc3545;
 }
 .home-todo .delete:hover {
   background-color: #bd2b39;
+  cursor: pointer;
+}
+.home-todo .cancel {
+  color: #020202;
+  font-weight: 700;
+  background-color: #f9f9f9;
+}
+.home-todo .cancel:hover {
+  background-color: #e8e8e8;
+  cursor: pointer;
+}
+.home-todo .save {
+  color: #020202;
+  font-weight: 700;
+  background-color: #9afe2e;
+}
+.home-todo .save:hover {
+  background-color: #7fd226;
   cursor: pointer;
 }

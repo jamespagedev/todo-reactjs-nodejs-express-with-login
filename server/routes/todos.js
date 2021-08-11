@@ -5,7 +5,7 @@
 /*=======================================================*/
 /*====================== middleware =====================*/
 /*=======================================================*/
-const { router, routeNames } = require('../config/middleware/middleware.js');
+const { router, routerNames } = require('../config/middleware/middleware.js');
 
 /*=======================================================*/
 /*==================== Authorization ====================*/
@@ -16,7 +16,7 @@ const { authenticate } = require('../config/middleware/auth.js');
 /*=======================================================*/
 /*====================== endpoints ======================*/
 /*=======================================================*/
-router.get(`/${routeNames.todos}/:userId`, authenticate, async(req, res, next) => {
+router.get(`${routerNames.todos}/:userId`, authenticate, async(req, res, next) => {
   try {
     const userId = Number(req.params.userId);
     res.status(200).json(userToDos[userId]);
@@ -25,7 +25,7 @@ router.get(`/${routeNames.todos}/:userId`, authenticate, async(req, res, next) =
   }
 });
 
-router.get(`/${routeNames.todos}/:userId/:toDoId`, authenticate, async(req, res, next) => {
+router.get(`${routerNames.todos}/:userId/:toDoId`, authenticate, async(req, res, next) => {
   try {
     const userId = Number(req.params.userId);
     const toDoId = Number(req.params.toDoId);
@@ -41,7 +41,7 @@ router.get(`/${routeNames.todos}/:userId/:toDoId`, authenticate, async(req, res,
   }
 });
 
-router.post(`/${routeNames.todos}/:userId`, authenticate, async(req, res, next) => {
+router.post(`${routerNames.todos}/:userId`, authenticate, async(req, res, next) => {
   try {
     // ToDo: Validation
     const userId = Number(req.params.userId);
@@ -58,7 +58,7 @@ router.post(`/${routeNames.todos}/:userId`, authenticate, async(req, res, next) 
   }
 });
 
-router.put(`/${routeNames.todos}/:userId/:toDoId`, authenticate, async(req, res, next) => {
+router.put(`${routerNames.todos}/editToDoReturnId/:userId/:toDoId`, authenticate, async(req, res, next) => {
   try {
     // ToDo: Validation
     const userId = Number(req.params.userId);
@@ -78,7 +78,27 @@ router.put(`/${routeNames.todos}/:userId/:toDoId`, authenticate, async(req, res,
   }
 });
 
-router.delete(`/${routeNames.todos}/:userId/:toDoId`, authenticate, async(req, res, next) => {
+router.put(`${routerNames.todos}/editToDoReturnToDo/:userId/:toDoId`, authenticate, async(req, res, next) => {
+  try {
+    // ToDo: Validation
+    const userId = Number(req.params.userId);
+    const toDoId = Number(req.params.toDoId);
+    const details = req.body.details;
+    const toDoIdIndex = userToDos[userId].findIndex(todo => todo.id === toDoId);
+    if(toDoIdIndex > -1) {
+      userToDos[userId][toDoIdIndex].details = details;
+    } else {
+      const errDetails = {code: 400, uniqueMessage: 'todo not found'};
+      throw { errDetails };
+    }
+
+    res.status(202).json(userToDos[userId][toDoIdIndex]);
+  } catch(err) {
+    (err.errDetails) ? next(err.errDetails) : next(err);
+  }
+});
+
+router.delete(`${routerNames.todos}/:userId/:toDoId`, authenticate, async(req, res, next) => {
   try {
     // ToDo: Validation
     const userId = Number(req.params.userId);
