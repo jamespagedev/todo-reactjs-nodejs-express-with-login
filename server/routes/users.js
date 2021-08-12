@@ -38,7 +38,6 @@ router.post(`${routerNames.users}/login`, async(req, res, next) => {
 
     const token = await getNewToken();
     res.status(201).json({id: users[userIndex].userId, name: users[userIndex].userName, token: token});
-    next();
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);
   }
