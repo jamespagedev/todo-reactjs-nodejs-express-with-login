@@ -1,3 +1,4 @@
+const locStorTokName = 'jamespagedev-todos';
 const proxyServer = process.env.NODE_ENV === "dev" ? "" :
 (process.env.NODE_ENV === "integ" ? process.env.REACT_APP_INTEG_PROXY_SERVER :
   (process.env.NODE_ENV === "acpt" ? process.env.REACT_APP_ACPT_PROXY_SERVER :
@@ -25,6 +26,7 @@ const backendRoutes = {
 }
 
 export {
+  locStorTokName,
   proxyServer,
   guestUserId,
   frontendLinks,

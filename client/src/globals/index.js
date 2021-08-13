@@ -3,6 +3,7 @@ import {
 } from './globalContext.js';
 
 import {
+  locStorTokName,
   proxyServer,
   guestUserId,
   frontendLinks,
@@ -20,6 +21,7 @@ export {
   GlobalContext,
 
   // variables
+  locStorTokName,
   proxyServer,
   guestUserId,
   frontendLinks,

@@ -15,6 +15,22 @@ const { axios, router, routerNames } = require('../config/middleware/middleware.
 /*=======================================================*/
 /*======================== routes =======================*/
 /*=======================================================*/
+router.get(`${routerNames.users}/silentLogin`, async(req, res, next) => {
+  try {
+    const token = req.get('Authorization');
+    if (!token) {
+      const errDetails = {code: 401, uniqueMessage: 'token not found'};
+      throw { errDetails };
+    }
+    const tokenStatus = await axios.get(`${process.env.BACKEND_SERVER}/users/silentLogin`, { headers: {Authorization: token} });
+    console.log('tokenStatus.data: ', tokenStatus.data);
+    res.status(200).json(tokenStatus.data);
+  } catch(err) {
+    (err.errDetails) ? next(err.errDetails) : next(err);
+  }
+  
+});
+
 router.post(`${routerNames.users}/login`, async(req, frontendRes, next) => {
   try {
     const data = req.body;
