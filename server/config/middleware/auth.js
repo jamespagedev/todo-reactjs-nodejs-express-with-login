@@ -10,7 +10,7 @@ const getNewToken = async(userId) => {
     'Should configure local .env file for tokenKey'; // hard coding this in the code is bad practice
 
   const tokenOptions = {
-    expiresIn: '1m' // otherValues(20s, '2 days', '10h', '7d'), a number(not string) represents in milliseconds
+    expiresIn: '1d' // otherValues(20s, '2 days', '10h', '7d'), a number(not string) represents in milliseconds
   };
 
   return jwt.sign(tokenProperties, tokenKey, tokenOptions);
@@ -37,6 +37,10 @@ const getTokenStatus = async(token) => {
   }
 }
 
+const isTokenExpWithinRefreshDays = (timeNow, timeTokenExp, timeTokenRefreshGracePeriod) => {
+  return (timeNow - timeTokenRefreshGracePeriod) <= timeTokenExp;
+}
+
 const authenticate = (req, res, next) => {
   // ToDo: if userId or token not provided, throw err
   // ToDo: if userId and token missmatch, throw err
@@ -46,5 +50,6 @@ const authenticate = (req, res, next) => {
 module.exports = {
   getNewToken,
   getTokenStatus,
+  isTokenExpWithinRefreshDays,
   authenticate
 }
