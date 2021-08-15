@@ -2,7 +2,7 @@ require('dotenv').config({path: '../../.env'});
 /* postgress
 const localPgConnection = {
   host: process.env.HOST,
-  database: process.env.DATABASE,
+  database: process.env.DB_NAME,
   user: process.env.USER,
   password: process.env.PASS || ''
 };
@@ -18,7 +18,7 @@ const dbSettings = {
   },
   migrations: {
     directory: './migrations',
-    tableName: 'dbmigrations'
+    // tableName: 'dbmigrations' <---- default table name "knex_migrations", used to keep track of migrations and rollbacks via knex
   },
   seeds: {
     directory: './seeds'
@@ -31,7 +31,7 @@ const devDbSettings = {
   connection: { filename: process.env.DB_NAME ? `./${process.env.DB_NAME}` : './devToDo.db3' },
   migrations: {
     directory: './schemas',
-    tableName: 'dbmigrations'
+    // tableName: 'dbmigrations' <---- default table name "knex_migrations", used to keep track of migrations and rollbacks via knex
   },
   seeds: { directory: './seeds' },
   useNullAsDefault: true // used to avoid warning on console

@@ -4,16 +4,22 @@ out of the box react, nodejs, express, with proxy, certs, authentication... to b
 # Commands To Setup Database
 ```
 // creates a seed file
-npx knex migrate:make one
-
-// reverts table(s)
-npx knex migrate:rollback
+npx knex migrate:make filename
 
 // injects table(s)
 npx knex migrate:latest
 
+// reverts table(s)
+npx knex migrate:rollback
+
+// injects specific table (example: development.js)
+npx knex migrate:up development.js --knexfile <project_location>\server\data\database\knexfile.js
+
+// reverts specific table (example: development.js)
+npx knex migrate:down development.js --knexfile <project_location>\server\data\database\knexfile.js
+
 // injects seed values
-npx knex seed:run
+npx knex seed:run --knexfile <project_location>\server\data\database\knexfile.js
 
 // heroku commands:
   heroku login
