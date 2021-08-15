@@ -25,30 +25,10 @@ const dbSettings = {
   }
 };
 */
-console.log('process.env.INITIAL_USER:', process.env.INITIAL_USER);
+
 const devDbSettings = {
   client: 'sqlite3',
-  connection: { filename: './devToDo.db3' },
-  migrations: {
-    directory: './schemas',
-    tableName: 'dbmigrations'
-  },
-  seeds: { directory: './seeds' },
-  useNullAsDefault: true // used to avoid warning on console
-}
-const testDbSettings = {
-  client: 'sqlite3',
-  connection: { filename: './testToDo.db3' },
-  migrations: {
-    directory: './schemas',
-    tableName: 'dbmigrations'
-  },
-  seeds: { directory: './seeds' }
-}
-
-const prodDbSettings = {
-  client: 'sqlite3',
-  connection: { filename: './prodToDo.db3' },
+  connection: { filename: process.env.DB_NAME ? `./${process.env.DB_NAME}` : './devToDo.db3' },
   migrations: {
     directory: './schemas',
     tableName: 'dbmigrations'
@@ -58,7 +38,6 @@ const prodDbSettings = {
 }
 
 module.exports = {
-  dev: devDbSettings,
-  test: testDbSettings,
-  prod: prodDbSettings
+  development: devDbSettings,
+  production: devDbSettings
 };
