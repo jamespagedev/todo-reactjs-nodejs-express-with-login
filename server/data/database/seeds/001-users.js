@@ -5,7 +5,6 @@ const { userStatusIds, numOfHashes } = require('../../../config/middleware/globa
 // For loop to generate numOfFakeUsers
 const generateSeeds = () => {
   let arr = [];
-  const now = new Date().getTime();
 
   // test account(s)
   arr.push({
@@ -14,9 +13,7 @@ const generateSeeds = () => {
     email: process.env.INITIAL_USER_EMAIL,
     status_id: userStatusIds.active,
     created_by: 1, // initial user id
-    created_at: now,
-    last_edited_by: 1, // initial user id
-    last_edited_at: now,
+    last_edited_by: 1 // initial user id
   });
   return arr;
 };
