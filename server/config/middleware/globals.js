@@ -1,6 +1,12 @@
 /*=======================================================*/
 /*====================== Variables ======================*/
 /*=======================================================*/
+const userStatusIds = {
+  banned: 0,
+  active: 1,
+  inactive: 2
+}
+const numOfHashes = 10;
 
 /*=======================================================*/
 /*====================== Functions ======================*/
@@ -43,6 +49,11 @@ const cloneObjByValue = (obj) => {
 }
 
 module.exports = {
+  // variables
+  userStatusIds,
+  numOfHashes,
+
+  // functions
   isObjectEmpty,
   cloneObjByValue
 }

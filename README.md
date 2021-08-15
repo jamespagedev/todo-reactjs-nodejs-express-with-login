@@ -1,6 +1,27 @@
 # todo-reactjs-nodejs-express-with-login
 out of the box react, nodejs, express, with proxy, certs, authentication... to be tested with multiple libraries
 
+# Commands To Setup Database
+```
+// creates a seed file
+npx knex migrate:make one
+
+// reverts table(s)
+npx knex migrate:rollback
+
+// injects table(s)
+npx knex migrate:latest
+
+// injects seed values
+npx knex seed:run
+
+// heroku commands:
+  heroku login
+  heroku run knex migrate:rollback -a irsr-backend
+  heroku run knex migrate:latest -a irsr-backend
+  heroku run knex seed:run -a irsr-backend
+```
+
 # Setup Certs in proxyserver and server
 - open commandline and change directory to <project_location>/proxyserver
 - execute command `openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./proxyserver.key -out proxyserver.crt`
