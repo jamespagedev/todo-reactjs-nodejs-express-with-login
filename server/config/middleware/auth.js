@@ -2,6 +2,9 @@ const jwt = require('jsonwebtoken');
 const { numOfTokenHandshakeHashes } = require('./globals.js');
 const { bcrypt } = require('./middleware.js');
 
+const authHeaderUserIdIndex = 0;
+const authHeaderTokenIndex = 1;
+
 const getNewToken = async(userId, tokenHandshake) => {
   const tokenProperties = {
     userId: userId,
@@ -51,6 +54,8 @@ const authenticate = (req, res, next) => {
 }
 
 module.exports = {
+  authHeaderUserIdIndex,
+  authHeaderTokenIndex,
   getNewToken,
   getTokenStatus,
   isTokenExpWithinRefreshDays,

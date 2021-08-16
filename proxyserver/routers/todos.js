@@ -42,11 +42,12 @@ router.post(`${routerNames.todos}/:userId`, authenticate, async(req, frontendRes
   try {
     // ToDo: Validation
     const userId = req.params.userId;
+    const headers = { headers: {Authorization: req.get('Authorization')} }
     const data = {
       details: req.body.details
     };
 
-    const backendRes = await axios.post(`${process.env.BACKEND_SERVER}/todos/${userId}`, data);
+    const backendRes = await axios.post(`${process.env.BACKEND_SERVER}/todos/${userId}`, data, headers);
     frontendRes.status(201).json(backendRes.data);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);

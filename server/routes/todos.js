@@ -6,12 +6,13 @@
 /*====================== middleware =====================*/
 /*=======================================================*/
 const { router, routerNames } = require('../config/middleware/middleware.js');
+const todosQueries = require('../data/database/queries/todos.js');
 
 /*=======================================================*/
 /*==================== Authorization ====================*/
 /*=======================================================*/
-const { userToDos } = require('../data/index.js'); // ToDo: remove and replace with database
-const { authenticate } = require('../config/middleware/auth.js');
+const { userToDos } = require('../data/dummydata/index.js'); // ToDo: remove and replace with database
+const { authHeaderUserIdIndex, authenticate } = require('../config/middleware/auth.js');
 
 /*=======================================================*/
 /*====================== endpoints ======================*/
@@ -19,40 +20,49 @@ const { authenticate } = require('../config/middleware/auth.js');
 router.get(`${routerNames.todos}/:userId`, authenticate, async(req, res, next) => {
   try {
     const userId = Number(req.params.userId);
-    res.status(200).json(userToDos[userId]);
+    const todos = await todosQueries.getUserToDosById(userId);
+    if(!todos) {
+      const errDetails = {code: 400, uniqueMessage: `no todos found for user id: ${userId}`};
+      throw { errDetails };
+    }
+    res.status(200).json(todos);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);
   }
 });
 
 router.get(`${routerNames.todos}/:userId/:toDoId`, authenticate, async(req, res, next) => {
-  try {
+  try {//getUserToDoByUserIdToDoId
     const userId = Number(req.params.userId);
     const toDoId = Number(req.params.toDoId);
-    const toDoIdIndex = userToDos[userId].findIndex(todo => todo.id === toDoId);
-    if(toDoIdIndex < 0) {
-      const errDetails = {code: 400, uniqueMessage: 'todo not found'};
+    const todo = await todosQueries.getUserToDoByUserIdToDoId(userId, toDoId);
+    if(!todo) {
+      const errDetails = {code: 400, uniqueMessage: `no todos found for user id: ${userId}, todo id: ${toDoId}`};
       throw { errDetails };
     }
 
-    res.status(200).json(userToDos[userId][toDoIdIndex]);
+    res.status(200).json(todo);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);
   }
 });
 
-router.post(`${routerNames.todos}/:userId`, authenticate, async(req, res, next) => {
+router.post(`${routerNames.todos}/:todoUserId`, authenticate, async(req, res, next) => {
   try {
-    // ToDo: Validation
-    const userId = Number(req.params.userId);
-    const details = req.body.details;
-    const newToDo = {
-      id: userToDos[userId].length === 0 ? 1 : userToDos[userId][userToDos[userId].length - 1].id + 1,
-      details: details
+    const authHeader = req.get('Authorization');
+    if(!authHeader || authHeader === undefined || authHeader.split(" ").length < 2)
+    {
+      const errDetails = {code: 401, uniqueMessage: 'invalid authorization found in headers'};
+      throw { errDetails };
     }
-    userToDos[userId].push(newToDo);
+    const userId = Number(authHeader.split(' ')[authHeaderUserIdIndex]);
+    console.log('userId:', userId);
+    // ToDo: Validation
+    const todoUserId = Number(req.params.todoUserId);
+    const details = req.body.details;
+    const newToDoId = await todosQueries.insertUserToDoReturnsToDoId(todoUserId, userId, details);
 
-    res.status(201).json(newToDo.id);
+    res.status(201).json(newToDoId);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);
   }

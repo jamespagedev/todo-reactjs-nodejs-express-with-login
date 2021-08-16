@@ -7,7 +7,7 @@ import FormAddToDo from '../components/home/formAddTodo.js';
 import ModalDeleteToDo from '../components/modals/modalDeleteToDo.js';
 
 // globals
-import { GlobalContext, proxyServer, backendRoutes, cloneObjByValue } from '../globals/index.js';
+import { GlobalContext, proxyServer, backendRoutes, locStorTokName, cloneObjByValue } from '../globals/index.js';
 
 const Home = () => {
   // variables
@@ -23,10 +23,12 @@ const Home = () => {
   }
 
   const addToDo = (newToDoText) => {
+    const headers = { headers: {Authorization: `${globalBackendData.userInfo.id} ${localStorage.getItem(locStorTokName)}`} }
     const data = {
       details: newToDoText
     }
-    axios.post(`${proxyServer}/${backendRoutes.todos.add}/${globalBackendData.userInfo.id}`, data)
+    console.log('headers', headers);
+    axios.post(`${proxyServer}/${backendRoutes.todos.add}/${globalBackendData.userInfo.id}`, data, headers)
     .then(res => {
       if(res.data > 0){
         const copyOfToDos = cloneObjByValue(todos);
