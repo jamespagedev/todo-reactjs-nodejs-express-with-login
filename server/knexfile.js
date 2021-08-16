@@ -1,4 +1,4 @@
-require('dotenv').config({path: '../../.env'});
+require('dotenv').config();
 /* postgress
 const localPgConnection = {
   host: process.env.HOST,
@@ -28,16 +28,18 @@ const dbSettings = {
 
 const devDbSettings = {
   client: 'sqlite3',
-  connection: { filename: process.env.DB_NAME ? `./${process.env.DB_NAME}` : './devToDo.db3' },
+  connection: { filename: process.env.DB_NAME ? `./${process.env.DB_NAME}` : './data/database/dev.db3' },
   migrations: {
-    directory: './schemas',
+    directory: './data/database/schemas',
     // tableName: 'dbmigrations' <---- default table name "knex_migrations", used to keep track of migrations and rollbacks via knex
   },
-  seeds: { directory: './seeds' },
+  seeds: { directory: './data/database/seeds' },
   useNullAsDefault: true // used to avoid warning on console
 }
 
 module.exports = {
   development: devDbSettings,
-  production: devDbSettings
+  dev: devDbSettings,
+  production: devDbSettings,
+  prod: devDbSettings
 };

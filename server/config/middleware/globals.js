@@ -7,6 +7,8 @@ const userStatusIds = {
   inactive: 2
 }
 const numOfHashes = 10;
+const numOfTokenHandshakeHashes = 6;
+const tokenHandshakeLength = 8;
 
 /*=======================================================*/
 /*====================== Functions ======================*/
@@ -48,12 +50,24 @@ const cloneObjByValue = (obj) => {
   throw new Error('Unable to clone object by value! Object value type is not supported');
 }
 
+const generateTokenHandshake = (strLength) => {
+  let tokenHandshake = '';
+  let characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/+';
+  for (let i = 0; i < strLength; i++) {
+    tokenHandshake += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return tokenHandshake;
+}
+
 module.exports = {
   // variables
   userStatusIds,
   numOfHashes,
+  numOfTokenHandshakeHashes,
+  tokenHandshakeLength,
 
   // functions
   isObjectEmpty,
-  cloneObjByValue
+  cloneObjByValue,
+  generateTokenHandshake
 }

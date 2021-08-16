@@ -1,6 +1,6 @@
 require('dotenv').config({path: '../../../.env'});
-const bcrypt = require('bcryptjs');
-const { userStatusIds, numOfHashes } = require('../../../config/middleware/globals.js');
+const { bcrypt } = require('../../../config/middleware/middleware.js');
+const { userStatusIds, numOfHashes, tokenHandshakeLength, generateTokenHandshake } = require('../../../config/middleware/globals.js');
 
 exports.up = async function (knex, Promise) {
   await knex.schema.createTable('users', (tbl) => {
@@ -15,7 +15,11 @@ exports.up = async function (knex, Promise) {
       .unique();
 
     // password(hashed)
-    tbl.string('password', 128).notNullable().defaultTo(bcrypt.hashSync(process.env.INITIAL_USER_PSWD, numOfHashes));
+    tbl.string('hashed_pswd', 128).notNullable().defaultTo(bcrypt.hashSync(process.env.INITIAL_USER_PSWD, numOfHashes));
+
+    // used to check if token payload containing hash value matches
+    // note: if you stored hash 'password' changes for the user in the database, then this value should also change.
+    tbl.string('token_handshake', tokenHandshakeLength).notNullable().defaultTo(generateTokenHandshake(tokenHandshakeLength));
 
     // email
     tbl

@@ -2,6 +2,7 @@
 out of the box react, nodejs, express, with proxy, certs, authentication... to be tested with multiple libraries
 
 # Commands To Setup Database
+- Note: I recommend using SQLiteStudio to view the database db3 file.
 ```
 // creates a seed file
 npx knex migrate:make filename
@@ -13,13 +14,19 @@ npx knex migrate:latest
 npx knex migrate:rollback
 
 // injects specific table (example: development.js)
-npx knex migrate:up development.js --knexfile <project_location>\server\data\database\knexfile.js
+npx knex migrate:up development.js --knexfile project_location\server\data\database\knexfile.js
+or from location "project_location\server":
+  npx knex migrate:up development.js --knexfile data\database\knexfile.js
 
 // reverts specific table (example: development.js)
-npx knex migrate:down development.js --knexfile <project_location>\server\data\database\knexfile.js
+npx knex migrate:down development.js --knexfile project_location\server\data\database\knexfile.js
+or from location "project_location\server":
+  npx knex migrate:down development.js --knexfile data\database\knexfile.js
 
 // injects seed values
 npx knex seed:run --knexfile <project_location>\server\data\database\knexfile.js
+or from location "project_location\server":
+  npx knex seed:run --knexfile data\database\knexfile.js
 
 // heroku commands:
   heroku login

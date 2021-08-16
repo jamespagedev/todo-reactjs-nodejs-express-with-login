@@ -1,8 +1,11 @@
 const jwt = require('jsonwebtoken');
+const { numOfTokenHandshakeHashes } = require('./globals.js');
+const { bcrypt } = require('./middleware.js');
 
-const getNewToken = async(userId) => {
+const getNewToken = async(userId, tokenHandshake) => {
   const tokenProperties = {
-    userId: userId
+    userId: userId,
+    tokenHashedHandshake: bcrypt.hashSync(tokenHandshake, numOfTokenHandshakeHashes)
   };
 
   const tokenKey =

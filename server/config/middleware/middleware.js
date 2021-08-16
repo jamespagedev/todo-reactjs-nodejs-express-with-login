@@ -1,6 +1,7 @@
 /*=======================================================*/
 /*===================== dependencies ====================*/
 /*=======================================================*/
+const bcrypt = require('bcryptjs');
 const express = require('express');
 const router = express.Router();
 const { createServer } = require('http'); // use this until certs are created to replace for https
@@ -28,6 +29,7 @@ const routerNames = {
 }
 
 module.exports = {
+  bcrypt,
   express,
   router,
   createServer, // use this until certs are created to replace for https
