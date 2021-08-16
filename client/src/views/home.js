@@ -27,7 +27,6 @@ const Home = () => {
     const data = {
       details: newToDoText
     }
-    console.log('headers', headers);
     axios.post(`${proxyServer}/${backendRoutes.todos.add}/${globalBackendData.userInfo.id}`, data, headers)
     .then(res => {
       if(res.data > 0){
@@ -55,7 +54,8 @@ const Home = () => {
   }
 
   const deleteToDo = (id) => {
-    axios.delete(`${proxyServer}/${backendRoutes.todos.delete}/${globalBackendData.userInfo.id}/${id}`)
+    const headers = { headers: {Authorization: `${globalBackendData.userInfo.id} ${localStorage.getItem(locStorTokName)}`} }
+    axios.delete(`${proxyServer}/${backendRoutes.todos.delete}/${id}`, headers)
     .then(res => {
       if(res.data > 0){
         const deletedId = res.data;

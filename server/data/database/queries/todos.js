@@ -28,11 +28,23 @@ const getUserToDoByUserIdToDoId = async(user_id, todo_id) => {
 
 const insertUserToDoReturnsToDoId = async(todo_user_id, insert_by_user_id, details) => {
   try{
-    const todo = {user_id: todo_user_id, details: details, created_by: insert_by_user_id, last_edited_by: insert_by_user_id};
+    const newTodo = {user_id: todo_user_id, details: details, created_by: insert_by_user_id, last_edited_by: insert_by_user_id};
     const results = await db
-      .insert(todo)
+      .insert(newTodo)
       .into('todos');
     return results[0];
+  } catch(err) {
+    console.log('error:', err);
+  }
+}
+
+const deleteUserToDoReturnsTrue = async(todo_id) => {
+  try{
+    const results = await db
+      .from('todos')
+      .del() // returns 1 or 0
+      .where('id', todo_id);
+    return !!results;
   } catch(err) {
     console.log('error:', err);
   }
@@ -41,5 +53,6 @@ const insertUserToDoReturnsToDoId = async(todo_user_id, insert_by_user_id, detai
 module.exports = {
   getUserToDosById,
   getUserToDoByUserIdToDoId,
-  insertUserToDoReturnsToDoId
+  insertUserToDoReturnsToDoId,
+  deleteUserToDoReturnsTrue
 };

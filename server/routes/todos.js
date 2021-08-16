@@ -14,6 +14,11 @@ const todosQueries = require('../data/database/queries/todos.js');
 const { userToDos } = require('../data/dummydata/index.js'); // ToDo: remove and replace with database
 const { authHeaderUserIdIndex, authenticate } = require('../config/middleware/auth.js');
 
+const isToDoOwnerOrAdmin = (req, res, next) => {
+  // ToDo: ensure the user is the owner of the ToDo, requires data lookup here.
+  next();
+}
+
 /*=======================================================*/
 /*====================== endpoints ======================*/
 /*=======================================================*/
@@ -56,7 +61,6 @@ router.post(`${routerNames.todos}/:todoUserId`, authenticate, async(req, res, ne
       throw { errDetails };
     }
     const userId = Number(authHeader.split(' ')[authHeaderUserIdIndex]);
-    console.log('userId:', userId);
     // ToDo: Validation
     const todoUserId = Number(req.params.todoUserId);
     const details = req.body.details;
@@ -108,15 +112,12 @@ router.put(`${routerNames.todos}/editToDoReturnToDo/:userId/:toDoId`, authentica
   }
 });
 
-router.delete(`${routerNames.todos}/:userId/:toDoId`, authenticate, async(req, res, next) => {
+router.delete(`${routerNames.todos}/:toDoId`, authenticate, isToDoOwnerOrAdmin, async(req, res, next) => {
   try {
     // ToDo: Validation
-    const userId = Number(req.params.userId);
     const toDoId = Number(req.params.toDoId);
-    const toDoIdIndex = userToDos[userId].findIndex(todo => todo.id === toDoId);
-    if(toDoIdIndex > -1) {
-      userToDos[userId].splice(toDoIdIndex, 1);
-    } else {
+    const isToDoDeleted = await todosQueries.deleteUserToDoReturnsTrue(toDoId);
+    if(!isToDoDeleted) {
       const errDetails = {code: 400, uniqueMessage: 'todo not found'};
       throw { errDetails };
     }

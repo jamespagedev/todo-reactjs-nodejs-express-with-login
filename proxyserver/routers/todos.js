@@ -86,13 +86,12 @@ router.put(`${routerNames.todos}/editToDoReturnToDo/:userId/:toDoId`, authentica
   }
 });
 
-router.delete(`${routerNames.todos}/:userId/:toDoId`, authenticate, async(req, frontendRes, next) => {
+router.delete(`${routerNames.todos}/:toDoId`, authenticate, async(req, frontendRes, next) => {
   try {
     // ToDo: Validation
-    const userId = req.params.userId;
     const toDoId = req.params.toDoId;
 
-    const backendRes = await axios.delete(`${process.env.BACKEND_SERVER}/todos/${userId}/${toDoId}`);
+    const backendRes = await axios.delete(`${process.env.BACKEND_SERVER}/todos/${toDoId}`);
     frontendRes.status(200).json(backendRes.data);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);
