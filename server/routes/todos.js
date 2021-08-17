@@ -38,11 +38,11 @@ router.get(`${routerNames.todos}/:userId`, authenticate, async(req, res, next) =
 
 router.get(`${routerNames.todos}/:userId/:toDoId`, authenticate, async(req, res, next) => {
   try {//getUserToDoByUserIdToDoId
-    const userId = Number(req.params.userId);
+    // const userId = Number(req.params.userId); // ToDo: use for authorization
     const toDoId = Number(req.params.toDoId);
-    const todo = await todosQueries.getUserToDoByUserIdToDoId(userId, toDoId);
+    const todo = await todosQueries.getUserToDoByUserIdToDoId(toDoId);
     if(!todo) {
-      const errDetails = {code: 400, uniqueMessage: `no todos found for user id: ${userId}, todo id: ${toDoId}`};
+      const errDetails = {code: 400, uniqueMessage: `no todos found for todo id: ${toDoId}`};
       throw { errDetails };
     }
 
@@ -72,41 +72,45 @@ router.post(`${routerNames.todos}/:todoUserId`, authenticate, async(req, res, ne
   }
 });
 
-router.put(`${routerNames.todos}/editToDoReturnId/:userId/:toDoId`, authenticate, async(req, res, next) => {
+router.put(`${routerNames.todos}/editToDoReturnId/:toDoId`, authenticate, async(req, res, next) => {
   try {
+    const authHeader = req.get('Authorization');
+    if(!authHeader || authHeader === undefined || authHeader.split(" ").length < 2)
+    {
+      const errDetails = {code: 401, uniqueMessage: 'invalid authorization found in headers'};
+      throw { errDetails };
+    }
     // ToDo: Validation
-    const userId = Number(req.params.userId);
+    const userId = Number(authHeader.split(' ')[authHeaderUserIdIndex]);
     const toDoId = Number(req.params.toDoId);
     const details = req.body.details;
-    const toDoIdIndex = userToDos[userId].findIndex(todo => todo.id === toDoId);
-    if(toDoIdIndex > -1) {
-      userToDos[userId][toDoIdIndex].details = details;
-    } else {
+    const updatedToDoId = await todosQueries.updateUserToDoReturnsToDoId(toDoId, userId, details);
+    if(updatedToDoId < 1) {
       const errDetails = {code: 400, uniqueMessage: 'todo not found'};
       throw { errDetails };
     }
 
-    res.status(202).json(toDoId);
+    res.status(202).json(updatedToDoId);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);
   }
 });
 
-router.put(`${routerNames.todos}/editToDoReturnToDo/:userId/:toDoId`, authenticate, async(req, res, next) => {
+router.put(`${routerNames.todos}/editToDoReturnToDo/:toDoId`, authenticate, async(req, res, next) => {
   try {
-    // ToDo: Validation
-    const userId = Number(req.params.userId);
-    const toDoId = Number(req.params.toDoId);
-    const details = req.body.details;
-    const toDoIdIndex = userToDos[userId].findIndex(todo => todo.id === toDoId);
-    if(toDoIdIndex > -1) {
-      userToDos[userId][toDoIdIndex].details = details;
-    } else {
-      const errDetails = {code: 400, uniqueMessage: 'todo not found'};
+    const authHeader = req.get('Authorization');
+    if(!authHeader || authHeader === undefined || authHeader.split(" ").length < 2)
+    {
+      const errDetails = {code: 401, uniqueMessage: 'invalid authorization found in headers'};
       throw { errDetails };
     }
+    // ToDo: Validation
+    const userId = Number(authHeader.split(' ')[authHeaderUserIdIndex]);
+    const toDoId = Number(req.params.toDoId);
+    const details = req.body.details;
+    const updatedToDo = await todosQueries.updateUserToDoReturnsToDo(toDoId, userId, details);
 
-    res.status(202).json(userToDos[userId][toDoIdIndex]);
+    res.status(202).json(updatedToDo);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);
   }
@@ -116,13 +120,13 @@ router.delete(`${routerNames.todos}/:toDoId`, authenticate, isToDoOwnerOrAdmin, 
   try {
     // ToDo: Validation
     const toDoId = Number(req.params.toDoId);
-    const isToDoDeleted = await todosQueries.deleteUserToDoReturnsTrue(toDoId);
-    if(!isToDoDeleted) {
+    const deletedToDoId = await todosQueries.deleteUserToDoReturnsTrue(toDoId);
+    if(deletedToDoId < 1) {
       const errDetails = {code: 400, uniqueMessage: 'todo not found'};
       throw { errDetails };
     }
 
-    res.status(200).json(toDoId);
+    res.status(200).json(deletedToDoId);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);
   }

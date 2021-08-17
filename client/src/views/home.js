@@ -39,8 +39,9 @@ const Home = () => {
   }
 
   const editToDo = (id, details) => {
+    const headers = { headers: {Authorization: `${globalBackendData.userInfo.id} ${localStorage.getItem(locStorTokName)}`} }
     const data = { details: details }
-    axios.put(`${proxyServer}/${backendRoutes.todos.edit}/${globalBackendData.userInfo.id}/${id}`, data)
+    axios.put(`${proxyServer}/${backendRoutes.todos.edit}/${id}`, data, headers)
     .then(res => {
       if(res.data.id > 0){
         const editedToDo = res.data;
