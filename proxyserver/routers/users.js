@@ -23,7 +23,6 @@ router.get(`${routerNames.users}/silentLogin`, async(req, res, next) => {
       throw { errDetails };
     }
     const tokenStatus = await axios.get(`${process.env.BACKEND_SERVER}/users/silentLogin`, { headers: {Authorization: token} });
-    console.log('tokenStatus.data: ', tokenStatus.data);
     res.status(200).json(tokenStatus.data);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);

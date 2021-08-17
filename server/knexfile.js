@@ -38,8 +38,13 @@ const devDbSettings = {
 }
 
 module.exports = {
+  /* keys used by knex library:
+    development
+    staging
+    procution
+  */
   development: devDbSettings,
-  dev: devDbSettings,
+  dev: devDbSettings, // used for custom dbConfig
   production: devDbSettings,
-  prod: devDbSettings
+  prod: devDbSettings // used for custom dbConfig
 };

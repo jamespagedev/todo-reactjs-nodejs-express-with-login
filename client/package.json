@@ -28,6 +28,7 @@
     "dev": "cross-env NODE_ENV=dev npm start",
     "devproxyserver": "cd ../proxyserver && nodemon index.js",
     "devserver": "cd ../server && nodemon index.js",
+    "devfullinstall": "\"cd ../server && npm install && npx knex migrate:latest && npx knex seed:run && cd ../proxyserver && npm install && cd ../client && npm install\"",
     "devfullstart": "concurrently \"cross-env NODE_ENV=dev npm run devserver\" \"cross-env NODE_ENV=dev npm run devproxyserver\" \"cross-env NODE_ENV=dev npm start\"",
     "integfullstart": "concurrently \"cross-env NODE_ENV=dev npm run devserver\" \"cross-env NODE_ENV=dev npm run devproxyserver\" \"cross-env NODE_ENV=integ npm start\"",
     "acptfullstart": "concurrently \"cross-env NODE_ENV=dev npm run devserver\" \"cross-env NODE_ENV=dev npm run devproxyserver\" \"cross-env NODE_ENV=acpt npm start\"",

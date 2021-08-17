@@ -37,7 +37,7 @@ router.get(`${routerNames.todos}/:userId`, authenticate, async(req, res, next) =
 });
 
 router.get(`${routerNames.todos}/:userId/:toDoId`, authenticate, async(req, res, next) => {
-  try {//getUserToDoByUserIdToDoId
+  try {
     // const userId = Number(req.params.userId); // ToDo: use for authorization
     const toDoId = Number(req.params.toDoId);
     const todo = await todosQueries.getUserToDoByUserIdToDoId(toDoId);
