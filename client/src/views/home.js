@@ -17,7 +17,8 @@ const Home = () => {
 
   // functions
   const getToDos = () => {
-    axios.get(`${proxyServer}/${backendRoutes.todos.all}/${globalBackendData.userInfo.id}`)
+    const headers = { headers: {Authorization: `${globalBackendData.userInfo.id} ${localStorage.getItem(locStorTokName)}`} }
+    axios.get(`${proxyServer}/${backendRoutes.todos.all}/${globalBackendData.userInfo.id}`, headers)
     .then(res => setTodos(res.data))
     .catch(err => console.log(err)); // <-- todo: create error modal
   }

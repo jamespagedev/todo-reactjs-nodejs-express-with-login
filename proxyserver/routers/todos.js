@@ -18,8 +18,9 @@ const { authenticate } = require('../config/middleware/auth.js');
 router.get(`${routerNames.todos}/:userId`, authenticate, async(req, frontendRes, next) => {
   try {
     const userId = req.params.userId;
+    const headers = { headers: {Authorization: req.get('Authorization')} }
 
-    const backendRes = await axios.get(`${process.env.BACKEND_SERVER}/todos/${userId}`);
+    const backendRes = await axios.get(`${process.env.BACKEND_SERVER}/todos/${userId}`, headers);
     frontendRes.status(200).json(backendRes.data);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);
@@ -30,8 +31,9 @@ router.get(`${routerNames.todos}/:userId/:toDoId`, authenticate, async(req, fron
   try {
     const userId = req.params.userId;
     const toDoId = req.params.toDoId;
+    const headers = { headers: {Authorization: req.get('Authorization')} }
 
-    const backendRes = await axios.get(`${process.env.BACKEND_SERVER}/todos/${userId}/${toDoId}`);
+    const backendRes = await axios.get(`${process.env.BACKEND_SERVER}/todos/${userId}/${toDoId}`, headers);
     frontendRes.status(200).json(backendRes.data);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);
@@ -90,8 +92,9 @@ router.delete(`${routerNames.todos}/:toDoId`, authenticate, async(req, frontendR
   try {
     // ToDo: Validation
     const toDoId = req.params.toDoId;
+    const headers = { headers: {Authorization: req.get('Authorization')} }
 
-    const backendRes = await axios.delete(`${process.env.BACKEND_SERVER}/todos/${toDoId}`);
+    const backendRes = await axios.delete(`${process.env.BACKEND_SERVER}/todos/${toDoId}`, headers);
     frontendRes.status(200).json(backendRes.data);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);

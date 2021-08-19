@@ -47,10 +47,30 @@ const isTokenExpWithinRefreshDays = (timeNow, timeTokenExp, timeTokenRefreshGrac
   return (timeNow - timeTokenRefreshGracePeriod) <= timeTokenExp;
 }
 
-const authenticate = (req, res, next) => {
-  // ToDo: if userId or token not provided, throw err
-  // ToDo: if userId and token missmatch, throw err
-  next();
+const authenticate = async(req, res, next) => {
+  try {
+    const authHeader = req.get('Authorization');
+    if(!authHeader || authHeader === undefined || authHeader.split(" ").length < 2) {
+      const errDetails = {code: 401, uniqueMessage: 'authentication failed'};
+      throw { errDetails };
+    }
+    const userId = Number(authHeader.split(" ")[authHeaderUserIdIndex]);
+    const token = authHeader.split(" ")[authHeaderTokenIndex];
+    const tokenPayload = await getTokenStatus(token);
+    const timeNow = new Date().getTime();
+    const timeTokenExp = tokenPayload.exp * 1000;
+    if(userId !== tokenPayload.userId) {
+      const errDetails = {code: 401, uniqueMessage: 'authentication failed'};
+      throw { errDetails };
+    }
+    if(timeNow > timeTokenExp) {
+      const errDetails = {code: 401, uniqueMessage: 'token expired'};
+      throw { errDetails };
+    }
+    next();
+  } catch(err) {
+    (err.errDetails) ? next(err.errDetails) : next(err);
+  }
 }
 
 module.exports = {
