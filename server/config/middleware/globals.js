@@ -1,6 +1,11 @@
 /*=======================================================*/
 /*====================== Variables ======================*/
 /*=======================================================*/
+const userTypeIds = {
+  guest: 0,
+  user: 1,
+  admin: 2
+}
 const userStatusIds = {
   banned: 0,
   active: 1,
@@ -61,6 +66,7 @@ const generateTokenHandshake = (strLength) => {
 
 module.exports = {
   // variables
+  userTypeIds,
   userStatusIds,
   numOfHashes,
   numOfTokenHandshakeHashes,

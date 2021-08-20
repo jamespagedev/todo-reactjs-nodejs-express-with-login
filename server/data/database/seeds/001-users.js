@@ -1,6 +1,6 @@
 require('dotenv').config({path: '../../../.env'});
 const { bcrypt } = require('../../../config/middleware/middleware.js');
-const { userStatusIds, numOfHashes } = require('../../../config/middleware/globals.js');
+const { userTypeIds, userStatusIds, numOfHashes } = require('../../../config/middleware/globals.js');
 
 // For loop to generate numOfFakeUsers
 const generateSeeds = () => {
@@ -9,6 +9,7 @@ const generateSeeds = () => {
   // test account(s)
   arr.push({
     username: process.env.INITIAL_USER,
+    user_type_id: userTypeIds.admin,
     hashed_pswd: bcrypt.hashSync(process.env.INITIAL_USER_PSWD, numOfHashes),
     email: process.env.INITIAL_USER_EMAIL,
     status_id: userStatusIds.active,

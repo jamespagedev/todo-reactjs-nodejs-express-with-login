@@ -7,27 +7,36 @@
 /*=======================================================*/
 const { router, routerNames } = require('../config/middleware/middleware.js');
 const todosQueries = require('../data/database/queries/todos.js');
+const {
+  authHeaderUserIdIndex, authenticate,
+  isToDoIdOwnerOrAdmin, isToDoUserIdOwnerOrAdmin
+} = require('../config/middleware/auth.js');
 
 /*=======================================================*/
-/*==================== Authorization ====================*/
+/*====================== Validation =====================*/
 /*=======================================================*/
-const { userToDos } = require('../data/dummydata/index.js'); // ToDo: remove and replace with database
-const { authHeaderUserIdIndex, authenticate } = require('../config/middleware/auth.js');
-
-const isToDoOwnerOrAdmin = (req, res, next) => {
-  // ToDo: ensure the user is the owner of the ToDo, requires data lookup here.
-  next();
+const isToDoValid = (req, res, next) => {
+  try{
+    const details = req.body.details;
+    if(!details || details === undefined) {
+      const errDetails = {code: 400, uniqueMessage: `todo is invalid`};
+      throw { errDetails };
+    }
+    next()
+  } catch(err) {
+    (err.errDetails) ? next(err.errDetails) : next(err);
+  }
 }
 
 /*=======================================================*/
 /*====================== endpoints ======================*/
 /*=======================================================*/
-router.get(`${routerNames.todos}/:userId`, authenticate, async(req, res, next) => {
+router.get(`${routerNames.todos}/getAllUserTodos/:todoUserId`, authenticate, isToDoUserIdOwnerOrAdmin, async(req, res, next) => {
   try {
-    const userId = Number(req.params.userId);
-    const todos = await todosQueries.getUserToDosById(userId);
+    const todoUserId = Number(req.params.todoUserId);
+    const todos = await todosQueries.getUserToDosById(todoUserId);
     if(!todos) {
-      const errDetails = {code: 400, uniqueMessage: `no todos found for user id: ${userId}`};
+      const errDetails = {code: 400, uniqueMessage: `no todos found for user id: ${todoUserId}`};
       throw { errDetails };
     }
     res.status(200).json(todos);
@@ -36,13 +45,12 @@ router.get(`${routerNames.todos}/:userId`, authenticate, async(req, res, next) =
   }
 });
 
-router.get(`${routerNames.todos}/:userId/:toDoId`, authenticate, async(req, res, next) => {
+router.get(`${routerNames.todos}/getToDo/:toDoId`, authenticate, isToDoIdOwnerOrAdmin, async(req, res, next) => {
   try {
-    // const userId = Number(req.params.userId); // ToDo: use for authorization
     const toDoId = Number(req.params.toDoId);
     const todo = await todosQueries.getUserToDoByUserIdToDoId(toDoId);
     if(!todo) {
-      const errDetails = {code: 400, uniqueMessage: `no todos found for todo id: ${toDoId}`};
+      const errDetails = {code: 400, uniqueMessage: `todo id: ${toDoId} not found`};
       throw { errDetails };
     }
 
@@ -52,19 +60,13 @@ router.get(`${routerNames.todos}/:userId/:toDoId`, authenticate, async(req, res,
   }
 });
 
-router.post(`${routerNames.todos}/:todoUserId`, authenticate, async(req, res, next) => {
+router.post(`${routerNames.todos}/addToDoForUser/:todoUserId`, authenticate, isToDoUserIdOwnerOrAdmin, isToDoValid, async(req, res, next) => {
   try {
     const authHeader = req.get('Authorization');
-    if(!authHeader || authHeader === undefined || authHeader.split(" ").length < 2)
-    {
-      const errDetails = {code: 401, uniqueMessage: 'invalid authorization found in headers'};
-      throw { errDetails };
-    }
-    const userId = Number(authHeader.split(' ')[authHeaderUserIdIndex]);
-    // ToDo: Validation
+    const requestorUserId = Number(authHeader.split(' ')[authHeaderUserIdIndex]);
     const todoUserId = Number(req.params.todoUserId);
     const details = req.body.details;
-    const newToDoId = await todosQueries.insertUserToDoReturnsToDoId(todoUserId, userId, details);
+    const newToDoId = await todosQueries.insertUserToDoReturnsToDoId(todoUserId, requestorUserId, details);
 
     res.status(201).json(newToDoId);
   } catch(err) {
@@ -72,15 +74,9 @@ router.post(`${routerNames.todos}/:todoUserId`, authenticate, async(req, res, ne
   }
 });
 
-router.put(`${routerNames.todos}/editToDoReturnId/:toDoId`, authenticate, async(req, res, next) => {
+router.put(`${routerNames.todos}/editToDoReturnId/:toDoId`, authenticate, isToDoIdOwnerOrAdmin, isToDoValid, async(req, res, next) => {
   try {
     const authHeader = req.get('Authorization');
-    if(!authHeader || authHeader === undefined || authHeader.split(" ").length < 2)
-    {
-      const errDetails = {code: 401, uniqueMessage: 'invalid authorization found in headers'};
-      throw { errDetails };
-    }
-    // ToDo: Validation
     const userId = Number(authHeader.split(' ')[authHeaderUserIdIndex]);
     const toDoId = Number(req.params.toDoId);
     const details = req.body.details;
@@ -96,15 +92,9 @@ router.put(`${routerNames.todos}/editToDoReturnId/:toDoId`, authenticate, async(
   }
 });
 
-router.put(`${routerNames.todos}/editToDoReturnToDo/:toDoId`, authenticate, async(req, res, next) => {
+router.put(`${routerNames.todos}/editToDoReturnToDo/:toDoId`, authenticate, isToDoIdOwnerOrAdmin, isToDoValid, async(req, res, next) => {
   try {
     const authHeader = req.get('Authorization');
-    if(!authHeader || authHeader === undefined || authHeader.split(" ").length < 2)
-    {
-      const errDetails = {code: 401, uniqueMessage: 'invalid authorization found in headers'};
-      throw { errDetails };
-    }
-    // ToDo: Validation
     const userId = Number(authHeader.split(' ')[authHeaderUserIdIndex]);
     const toDoId = Number(req.params.toDoId);
     const details = req.body.details;
@@ -116,9 +106,8 @@ router.put(`${routerNames.todos}/editToDoReturnToDo/:toDoId`, authenticate, asyn
   }
 });
 
-router.delete(`${routerNames.todos}/:toDoId`, authenticate, isToDoOwnerOrAdmin, async(req, res, next) => {
+router.delete(`${routerNames.todos}/:toDoId`, authenticate, isToDoIdOwnerOrAdmin, async(req, res, next) => {
   try {
-    // ToDo: Validation
     const toDoId = Number(req.params.toDoId);
     const deletedToDoId = await todosQueries.deleteUserToDoReturnsTrue(toDoId);
     if(deletedToDoId < 1) {

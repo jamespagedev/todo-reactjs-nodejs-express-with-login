@@ -26,7 +26,21 @@ const getUserInfoByUsername = async(username) => {
   }
 }
 
+const getUserTypeIdByUserId = async(userId) => {
+  try {
+    const data = await db
+      .select('user_type_id')
+      .from('users')
+      .where('id', userId)
+      .first();
+    return data.user_type_id;
+  } catch(err) {
+    console.log("error:", err);
+  }
+}
+
 module.exports = {
   getUserInfoById,
-  getUserInfoByUsername
+  getUserInfoByUsername,
+  getUserTypeIdByUserId
 };

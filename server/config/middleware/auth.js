@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
-const { numOfTokenHandshakeHashes } = require('./globals.js');
+const { numOfTokenHandshakeHashes, userTypeIds } = require('./globals.js');
 const { bcrypt } = require('./middleware.js');
+const todosQueries = require('../../data/database/queries/todos.js');
+const userQueries = require('../../data/database/queries/users.js');
 
 const authHeaderUserIdIndex = 0;
 const authHeaderTokenIndex = 1;
@@ -73,11 +75,54 @@ const authenticate = async(req, res, next) => {
   }
 }
 
+const isToDoIdOwnerOrAdmin = async(req, res, next) => {
+  try{
+    const authHeader = req.get('Authorization');
+    const requestorUserId = Number(authHeader.split(" ")[authHeaderUserIdIndex]);
+    const toDoId = Number(req.params.toDoId);
+    const toDoUserId = await todosQueries.getToDoUserIdByToDoId(toDoId);
+    if(toDoUserId === requestorUserId) {
+      next(); // requestor is todo owner
+    } else {
+      const requestorUserTypeId = await userQueries.getUserTypeIdByUserId(requestorUserId);
+      if(requestorUserTypeId !== userTypeIds.admin) {
+        const errDetails = {code: 403, uniqueMessage: `access denied`};
+        throw { errDetails };
+      }
+      next(); // requestor is admin
+    }
+  } catch(err) {
+    (err.errDetails) ? next(err.errDetails) : next(err);
+  }
+}
+
+const isToDoUserIdOwnerOrAdmin = async(req, res, next) => {
+  try{
+    const authHeader = req.get('Authorization');
+    const requestorUserId = Number(authHeader.split(" ")[authHeaderUserIdIndex]);
+    const todoUserId = Number(req.params.todoUserId);
+    if(todoUserId === requestorUserId) {
+      next(); // requestor is todo owner
+    } else {
+      const requestorUserTypeId = await userQueries.getUserTypeIdByUserId(requestorUserId);
+      if(requestorUserTypeId !== userTypeIds.admin) {
+        const errDetails = {code: 403, uniqueMessage: `access denied`};
+        throw { errDetails };
+      }
+      next(); // requestor is admin
+    }
+  } catch(err) {
+    (err.errDetails) ? next(err.errDetails) : next(err);
+  }
+}
+
 module.exports = {
   authHeaderUserIdIndex,
   authHeaderTokenIndex,
   getNewToken,
   getTokenStatus,
   isTokenExpWithinRefreshDays,
-  authenticate
+  authenticate,
+  isToDoIdOwnerOrAdmin,
+  isToDoUserIdOwnerOrAdmin
 }

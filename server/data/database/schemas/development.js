@@ -1,6 +1,6 @@
 require('dotenv').config({path: '../../../.env'});
 const { bcrypt } = require('../../../config/middleware/middleware.js');
-const { userStatusIds, numOfHashes, tokenHandshakeLength, generateTokenHandshake } = require('../../../config/middleware/globals.js');
+const { userTypeIds, userStatusIds, numOfHashes, tokenHandshakeLength, generateTokenHandshake } = require('../../../config/middleware/globals.js');
 
 exports.up = async function (knex, Promise) {
   await knex.schema.createTable('users', (tbl) => {
@@ -27,6 +27,9 @@ exports.up = async function (knex, Promise) {
       .notNullable()
       .defaultTo(process.env.INITIAL_USER_EMAIL)
       .unique();
+
+    // (0 = guest), (1 = user), and (2 = admin)
+    tbl.integer('user_type_id', 16).notNullable().defaultTo(userTypeIds.user);
 
     // (0 = banned), (1 = active), and (2 = inactive)
     tbl.integer('status_id', 16).notNullable().defaultTo(userStatusIds.active);
