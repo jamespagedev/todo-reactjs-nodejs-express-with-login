@@ -51,8 +51,8 @@ const ToDo = (props) => {
         <p className="p-details">{details}</p>
       </div>
       <div className="actions">
-        <button className="edit" onClick={ev => editButtonHandler(ev)}>EDIT</button>
-        <button className="delete" onClick={ev => deleteButtonHandler(ev)}>DELETE</button>
+        <button type="button" className="edit" onClick={ev => editButtonHandler(ev)}>EDIT</button>
+        <button type="button" className="delete" onClick={ev => deleteButtonHandler(ev)}>DELETE</button>
       </div>
     </div>
   )
