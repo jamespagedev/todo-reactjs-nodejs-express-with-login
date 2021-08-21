@@ -11,7 +11,6 @@ const login = async(username, pswd, setIsLoggingIn, setGlobalBackendData) => {
   }
   axios.post(`${proxyServer}/${backendRoutes.users.login}`, data)
   .then(res => {
-    console.log('res.data.token:', res.data.token);
     Promise.resolve(localStorage.setItem(locStorTokName, res.data.token))
     .then(() => setGlobalBackendData({userInfo: res.data}));
   })
@@ -26,16 +25,12 @@ const silentLogin = async(setGlobalBackendData) => {
       return;
     }
 
-    const loginSession = await axios.get(`${proxyServer}/users/silentLogin`, { headers: {Authorization: localStorage.getItem(locStorTokName)} });
-    console.log('tokenStatus:', loginSession);
+    const loginSession = await axios.get(`${proxyServer}/${backendRoutes.users.silentLogin}`, { headers: {Authorization: localStorage.getItem(locStorTokName)} });
     if(loginSession.data.isNewToken){
-      console.log('new token');
       localStorage.setItem(locStorTokName, loginSession.data.token)
     }
-    console.log('good token');
     setGlobalBackendData({ userInfo :{id: loginSession.data.id, name: loginSession.data.name, token: loginSession.data.token}});
   } catch(err) {
-    console.log('bad token');
     console.log(err); // <-- todo: create error modal
     localStorage.clear();
     setGlobalBackendData({ userInfo :{id: guestUserId, name: "", token: null} });

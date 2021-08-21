@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import './header.css';
 
 // globals
 import { GlobalContext } from '../../globals/index.js';

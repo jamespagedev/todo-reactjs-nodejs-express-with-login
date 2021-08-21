@@ -1,5 +1,3 @@
-import './header-guest.css';
-
 const HeaderGuest = (props) => {
   const { openLoginModal } = props;
   return (

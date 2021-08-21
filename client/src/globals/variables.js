@@ -15,7 +15,8 @@ const frontendLinks = {
 
 const backendRoutes = {
   users: {
-    login: 'users/login'
+    login: 'users/login',
+    silentLogin: 'users/silentLogin'
   },
   todos: {
     all: 'todos/getAllUserTodos', // (/:userId, { headers })
