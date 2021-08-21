@@ -16,17 +16,16 @@ const ModalDeleteToDo = (props) => {
   // render
   return (
     <div className={modalData.isOpen ? "modal-background-show" : "modal-background-hide"} onClick={closeModal}>
-      <div className={modalData.isOpen ? "modal-login-opened" : "modal-login-closed"} onClick={ev => ev.stopPropagation()}>
-        <div className="top">
-          <h2>Are You Sure?</h2>
+      <div className={modalData.isOpen ? "modal-delete-opened" : "modal-delete-closed"} onClick={ev => ev.stopPropagation()}>
+        <div className="modal-delete-top">
+          <h2>Delete the following To Do?</h2>
         </div>
-        <div className="mid">
-          <h3>Delete the following To Do:</h3>
+        <div className="modal-delete-mid">
           <p>{modalData.details}</p>
         </div>
-        <div className="bot">
-          <button type="button" onClick={closeModal}>CANCEL</button>
-          <button type="button" onClick={ev => deleteHandler(ev)}>DELETE</button>
+        <div className="modal-delete-bot">
+          <button type="button" className="cancel" onClick={closeModal}>CANCEL</button>
+          <button type="button" className="delete" onClick={ev => deleteHandler(ev)}>DELETE</button>
         </div>
       </div>
     </div>

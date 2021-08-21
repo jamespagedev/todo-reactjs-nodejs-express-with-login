@@ -219,6 +219,7 @@ img {
   flex-direction: column;
   width: 100%;
   max-width: 768px;
+  padding: 0 80px;
   background-color: #ffffff;
   -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
@@ -233,6 +234,135 @@ img {
 .modal-login-closed {
   margin: 0 auto;
 }
+.modal-login-top {
+  margin: 40px 0 20px;
+}
+.modal-login-top h2 {
+  font-size: 2.6rem;
+  text-align: center;
+}
+.modal-login-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+  padding: 8px 20px;
+}
+.modal-login-mid input {
+  width: 100%;
+  padding: 8px 15px;
+  font-size: 1.8rem;
+  outline: none;
+}
+.modal-login-mid input:first-child {
+  margin-bottom: 20px;
+}
+.modal-login-bot {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  padding: 8px 20px;
+}
+.modal-login-bot button {
+  padding: 15px 40px;
+  border: none;
+  color: #ffffff;
+  font-size: 2rem;
+}
+.modal-login-bot .cancel {
+  background-color: #6b6b6b;
+}
+.modal-login-bot .cancel:hover {
+  background-color: #565656;
+  cursor: pointer;
+}
+.modal-login-bot .login {
+  background-color: #1e90ff;
+}
+.modal-login-bot .login:hover {
+  background-color: #1972c7;
+  cursor: pointer;
+}
+/*===================== Delete Modal ====================*/
+.modal-delete-opened, .modal-delete-closed {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 768px;
+  background-color: #ffffff;
+  -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  -webkit-transition: margin 400ms ease-in;
+  -moz-transition: margin 400ms ease-in;
+  transition: margin 400ms ease-in;
+}
+.modal-delete-opened {
+  margin: 50px auto 0;
+}
+.modal-delete-closed {
+  margin: 0 auto;
+}
+.modal-delete-top {
+  margin: 40px 0 20px;
+}
+.modal-delete-top h2 {
+  font-size: 2.6rem;
+  text-align: center;
+}
+.modal-delete-mid {
+  padding: 8px 20px;
+}
+.modal-delete-mid p {
+  width: 100%;
+  height: 100px;
+  margin-bottom: 20px;
+  padding: 5px 40px 5px 10px;
+  border: 2px solid #000000;
+  scrollbar-width: thin;
+  scrollbar-color: #d3d3d3 #ffffff;
+  overflow-y: auto;
+}
+.modal-delete-mid p::-webkit-scrollbar {
+  width: 11px;
+}
+.modal-delete-mid p::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+.modal-delete-mid p::-webkit-scrollbar-thumb {
+  background-color: #d3d3d3;
+  border-radius: 6px;
+  border: 3px solid #ffffff;
+}
+.modal-delete-bot {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+  padding: 8px 20px;
+}
+.modal-delete-bot button {
+  padding: 15px 40px;
+  border: none;
+  color: #ffffff;
+  font-size: 2rem;
+}
+.modal-delete-bot .cancel {
+  margin-right: 80px;
+  background-color: #6b6b6b;
+}
+.modal-delete-bot .cancel:hover {
+  background-color: #565656;
+  cursor: pointer;
+}
+.modal-delete-bot .delete {
+  background-color: #dc3545;
+}
+.modal-delete-bot .delete:hover {
+  background-color: #bd2b39;
+  cursor: pointer;
+}
+
 /*===================== HOME =====================*/
 .form-home-add-todo {
   display: flex;

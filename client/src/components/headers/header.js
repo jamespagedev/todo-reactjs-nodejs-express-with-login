@@ -16,8 +16,10 @@ const Header = () => {
 
   return (
     <header className="header">
-      <i className="fa fa-user-circle" />
-      <p>{globalBackendData.userInfo.name}</p>
+      <div className="div-header-user">
+        <i className="fa fa-user-circle" />
+        <p>{globalBackendData.userInfo.name}</p>
+      </div>
       <button onClick={ev => logoutButtonHandler(ev)}>Logout</button>
     </header>
   )
