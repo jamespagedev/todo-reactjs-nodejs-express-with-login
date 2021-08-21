@@ -22,7 +22,7 @@ const FormAddToDo = (props) => {
   return (
     <form className="form-home-add-todo">
       <textarea rows="4" placeholder="Add todo task here..." value={newToDoText} onChange={ev => setNewToDoText(ev.target.value)} />
-      <button className={newToDoText ? "add" : "disabled"} onClick={ev => addButtonHandler(ev)}>Add To Do</button>
+      <button type="button" className={newToDoText ? "add" : "disabled"} onClick={ev => addButtonHandler(ev)}>Add To Do</button>
     </form>
   )
 }
