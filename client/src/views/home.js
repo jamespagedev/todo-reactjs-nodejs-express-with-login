@@ -67,13 +67,12 @@ const Home = () => {
   // setup
   useEffect(() => {
     if(socket){
-      console.log('useEffect');
       socket.emit('socket_channel', tempToDosUserId)
       socket.on('update_todos', res => {
         setTodos(res); // this only updates on everyone else browser except yours
       });
     }
-  }, [socket]);
+  }, [socket, tempToDosUserId]);
   useEffect(() => {
     const newSocket = io(`${proxyServer}`, {
       extraHeaders: { // note: socket.io lowercases all keynames.
