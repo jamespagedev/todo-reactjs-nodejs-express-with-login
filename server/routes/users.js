@@ -16,7 +16,7 @@ const { getNewToken, getTokenStatus, isTokenExpWithinRefreshDays } = require('..
 /*=======================================================*/
 /*====================== endpoints ======================*/
 /*=======================================================*/
-router.get(`${routerNames.users}/silentLogin`, async(req, res, next) => {
+router.get(`/${routerNames.users}/silentLogin`, async(req, res, next) => {
   try {
     const token = req.get('Authorization');
     if (!token) {
@@ -47,7 +47,7 @@ router.get(`${routerNames.users}/silentLogin`, async(req, res, next) => {
   }
 });
 
-router.post(`${routerNames.users}/login`, async(req, res, next) => {
+router.post(`/${routerNames.users}/login`, async(req, res, next) => {
   try {
     const userName = req.body.userName;
     const password = req.body.pswd;

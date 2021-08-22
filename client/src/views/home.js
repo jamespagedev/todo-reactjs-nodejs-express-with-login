@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
 // Components
@@ -12,19 +12,19 @@ import { GlobalContext, proxyServer, backendRoutes, locStorTokName, cloneObjByVa
 const Home = () => {
   // variables
   const { globalBackendData } = useContext(GlobalContext);
+  const headers = useMemo(getHeaders, [globalBackendData.userInfo.id]);
   const [todos, setTodos] = useState([]);
   const [deleteModalData, setDeleteModalData] = useState({isOpen: false, id: 0, details: ""});
 
   // functions
-  const getToDos = () => {
-    const headers = { headers: {Authorization: `${globalBackendData.userInfo.id} ${localStorage.getItem(locStorTokName)}`} }
+  function getHeaders(){return { headers: {Authorization: `${globalBackendData.userInfo.id} ${localStorage.getItem(locStorTokName)}`} }}
+  function getToDos() {
     axios.get(`${proxyServer}/${backendRoutes.todos.all}/${globalBackendData.userInfo.id}`, headers)
     .then(res => setTodos(res.data))
     .catch(err => console.log(err)); // <-- todo: create error modal
   }
 
-  const addToDo = (newToDoText) => {
-    const headers = { headers: {Authorization: `${globalBackendData.userInfo.id} ${localStorage.getItem(locStorTokName)}`} }
+  function addToDo(newToDoText) {
     const data = {
       details: newToDoText
     }
@@ -39,8 +39,7 @@ const Home = () => {
     .catch(err => console.log(err)); // <-- todo: create error modal
   }
 
-  const editToDo = (id, details) => {
-    const headers = { headers: {Authorization: `${globalBackendData.userInfo.id} ${localStorage.getItem(locStorTokName)}`} }
+  function editToDo(id, details) {
     const data = { details: details }
     axios.put(`${proxyServer}/${backendRoutes.todos.edit}/${id}`, data, headers)
     .then(res => {
@@ -55,8 +54,7 @@ const Home = () => {
     .catch(err => console.log(err)); // <-- todo: create error modal
   }
 
-  const deleteToDo = (id) => {
-    const headers = { headers: {Authorization: `${globalBackendData.userInfo.id} ${localStorage.getItem(locStorTokName)}`} }
+  function deleteToDo(id) {
     axios.delete(`${proxyServer}/${backendRoutes.todos.delete}/${id}`, headers)
     .then(res => {
       if(res.data > 0){
@@ -71,7 +69,7 @@ const Home = () => {
   }
 
   // setup
-  useEffect(getToDos, [globalBackendData.userInfo.id]);
+  useEffect(getToDos, [globalBackendData.userInfo.id, headers]);
 
   return (
     <div className="view">

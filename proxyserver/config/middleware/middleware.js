@@ -25,9 +25,19 @@ const { createServer } = require('http'); // use this until certs are created to
 const cacheUserTokenInfo = {};
 const authHeadersUserIdIndex = 0;
 const authHeadersTokenIndex = 1;
-const routerNames = {
-  todos: '/todos',
-  users: '/users'
+const proxyRouterNames = {
+  todos: 'todos',
+  users: 'users'
+}
+const backendRoutes = {
+  login: 'users/login',
+  silentLogin: 'users/silentLogin',
+  getToDosForUserByUserId: 'todos/getAllUserTodos',
+  getToDoForUserByToDoId: 'todos/getToDo',
+  addToDoForUserByUserId: 'todos/addToDoForUser',
+  editToDoForUserByToDoIdReturnToDoId: 'todos/editToDoReturnId',
+  editToDoForUserByToDoIdReturnToDo: 'todos/editToDoReturnToDo',
+  delToDoForUserByToDoId: 'todos'
 }
 
 module.exports = {
@@ -41,5 +51,6 @@ module.exports = {
   cacheUserTokenInfo,
   authHeadersUserIdIndex,
   authHeadersTokenIndex,
-  routerNames
+  proxyRouterNames,
+  backendRoutes
 }

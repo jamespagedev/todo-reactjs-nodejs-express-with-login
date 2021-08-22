@@ -31,7 +31,7 @@ const isToDoValid = (req, res, next) => {
 /*=======================================================*/
 /*====================== endpoints ======================*/
 /*=======================================================*/
-router.get(`${routerNames.todos}/getAllUserTodos/:todoUserId`, authenticate, isToDoUserIdOwnerOrAdmin, async(req, res, next) => {
+router.get(`/${routerNames.todos}/getAllUserTodos/:todoUserId`, authenticate, isToDoUserIdOwnerOrAdmin, async(req, res, next) => {
   try {
     const todoUserId = Number(req.params.todoUserId);
     const todos = await todosQueries.getUserToDosById(todoUserId);
@@ -45,7 +45,7 @@ router.get(`${routerNames.todos}/getAllUserTodos/:todoUserId`, authenticate, isT
   }
 });
 
-router.get(`${routerNames.todos}/getToDo/:toDoId`, authenticate, isToDoIdOwnerOrAdmin, async(req, res, next) => {
+router.get(`/${routerNames.todos}/getToDo/:toDoId`, authenticate, isToDoIdOwnerOrAdmin, async(req, res, next) => {
   try {
     const toDoId = Number(req.params.toDoId);
     const todo = await todosQueries.getUserToDoByUserIdToDoId(toDoId);
@@ -60,7 +60,7 @@ router.get(`${routerNames.todos}/getToDo/:toDoId`, authenticate, isToDoIdOwnerOr
   }
 });
 
-router.post(`${routerNames.todos}/addToDoForUser/:todoUserId`, authenticate, isToDoUserIdOwnerOrAdmin, isToDoValid, async(req, res, next) => {
+router.post(`/${routerNames.todos}/addToDoForUser/:todoUserId`, authenticate, isToDoUserIdOwnerOrAdmin, isToDoValid, async(req, res, next) => {
   try {
     const authHeader = req.get('Authorization');
     const requestorUserId = Number(authHeader.split(' ')[authHeaderUserIdIndex]);
@@ -74,7 +74,7 @@ router.post(`${routerNames.todos}/addToDoForUser/:todoUserId`, authenticate, isT
   }
 });
 
-router.put(`${routerNames.todos}/editToDoReturnId/:toDoId`, authenticate, isToDoIdOwnerOrAdmin, isToDoValid, async(req, res, next) => {
+router.put(`/${routerNames.todos}/editToDoReturnId/:toDoId`, authenticate, isToDoIdOwnerOrAdmin, isToDoValid, async(req, res, next) => {
   try {
     const authHeader = req.get('Authorization');
     const userId = Number(authHeader.split(' ')[authHeaderUserIdIndex]);
@@ -92,7 +92,7 @@ router.put(`${routerNames.todos}/editToDoReturnId/:toDoId`, authenticate, isToDo
   }
 });
 
-router.put(`${routerNames.todos}/editToDoReturnToDo/:toDoId`, authenticate, isToDoIdOwnerOrAdmin, isToDoValid, async(req, res, next) => {
+router.put(`/${routerNames.todos}/editToDoReturnToDo/:toDoId`, authenticate, isToDoIdOwnerOrAdmin, isToDoValid, async(req, res, next) => {
   try {
     const authHeader = req.get('Authorization');
     const userId = Number(authHeader.split(' ')[authHeaderUserIdIndex]);
@@ -106,7 +106,7 @@ router.put(`${routerNames.todos}/editToDoReturnToDo/:toDoId`, authenticate, isTo
   }
 });
 
-router.delete(`${routerNames.todos}/:toDoId`, authenticate, isToDoIdOwnerOrAdmin, async(req, res, next) => {
+router.delete(`/${routerNames.todos}/:toDoId`, authenticate, isToDoIdOwnerOrAdmin, async(req, res, next) => {
   try {
     const toDoId = Number(req.params.toDoId);
     const deletedToDoId = await todosQueries.deleteUserToDoReturnsTrue(toDoId);
