@@ -15,7 +15,7 @@ const { axios, router, routerNames } = require('../config/middleware/middleware.
 /*=======================================================*/
 /*======================== routes =======================*/
 /*=======================================================*/
-router.get(`${routerNames.users}/silentLogin`, async(req, res, next) => {
+router.get(`/${routerNames.users}/silentLogin`, async(req, res, next) => {
   try {
     const token = req.get('Authorization');
     if (!token) {
@@ -30,7 +30,7 @@ router.get(`${routerNames.users}/silentLogin`, async(req, res, next) => {
   
 });
 
-router.post(`${routerNames.users}/login`, async(req, frontendRes, next) => {
+router.post(`/${routerNames.users}/login`, async(req, frontendRes, next) => {
   try {
     const data = req.body;
     if (!data.userName || data.userName === undefined || data.userName === null || data.userName === '' ||

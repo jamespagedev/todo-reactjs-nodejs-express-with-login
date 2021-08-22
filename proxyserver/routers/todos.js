@@ -15,19 +15,19 @@ const { authenticate } = require('../config/middleware/auth.js');
 /*=======================================================*/
 /*======================== routes =======================*/
 /*=======================================================*/
-router.get(`${routerNames.todos}/getAllUserTodos/:todoUserId`, authenticate, async(req, frontendRes, next) => {
+router.get(`/${routerNames.todos}/getAllUserTodos/:todoUserId`, authenticate, async(req, frontendRes, next) => {
   try {
     const todoUserId = req.params.todoUserId;
     const headers = { headers: {Authorization: req.get('Authorization')} }
 
-    const backendRes = await axios.get(`${process.env.BACKEND_SERVER}/todos/getAllUserTodos/${todoUserId}`, headers);
+    const backendRes = await axios.get(`${process.env.BACKEND_SERVER}/${routerNames.todos}/getAllUserTodos/${todoUserId}`, headers);
     frontendRes.status(200).json(backendRes.data);
   } catch(err) {
     (err.errDetails) ? next(err.errDetails) : next(err);
   }
 });
 
-router.get(`${routerNames.todos}/getToDo/:toDoId`, authenticate, async(req, frontendRes, next) => {
+router.get(`/${routerNames.todos}/getToDo/:toDoId`, authenticate, async(req, frontendRes, next) => {
   try {
     const toDoId = req.params.toDoId;
     const headers = { headers: {Authorization: req.get('Authorization')} }
@@ -39,7 +39,7 @@ router.get(`${routerNames.todos}/getToDo/:toDoId`, authenticate, async(req, fron
   }
 });
 
-router.post(`${routerNames.todos}/addToDoForUser/:todoUserId`, authenticate, async(req, frontendRes, next) => {
+router.post(`/${routerNames.todos}/addToDoForUser/:todoUserId`, authenticate, async(req, frontendRes, next) => {
   try {
     // ToDo: Validation
     const todoUserId = req.params.todoUserId;
@@ -55,7 +55,7 @@ router.post(`${routerNames.todos}/addToDoForUser/:todoUserId`, authenticate, asy
   }
 });
 
-router.put(`${routerNames.todos}/editToDoReturnId/:toDoId`, authenticate, async(req, frontendRes, next) => {
+router.put(`/${routerNames.todos}/editToDoReturnId/:toDoId`, authenticate, async(req, frontendRes, next) => {
   try {
     // ToDo: Validation
     const toDoId = req.params.toDoId;
@@ -71,7 +71,7 @@ router.put(`${routerNames.todos}/editToDoReturnId/:toDoId`, authenticate, async(
   }
 });
 
-router.put(`${routerNames.todos}/editToDoReturnToDo/:toDoId`, authenticate, async(req, frontendRes, next) => {
+router.put(`/${routerNames.todos}/editToDoReturnToDo/:toDoId`, authenticate, async(req, frontendRes, next) => {
   try {
     // ToDo: Validation
     const toDoId = req.params.toDoId;
@@ -87,7 +87,7 @@ router.put(`${routerNames.todos}/editToDoReturnToDo/:toDoId`, authenticate, asyn
   }
 });
 
-router.delete(`${routerNames.todos}/:toDoId`, authenticate, async(req, frontendRes, next) => {
+router.delete(`/${routerNames.todos}/:toDoId`, authenticate, async(req, frontendRes, next) => {
   try {
     // ToDo: Validation
     const toDoId = req.params.toDoId;

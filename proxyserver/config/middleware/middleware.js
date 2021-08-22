@@ -5,6 +5,7 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+const { Server } = require('socket.io');
 const { createServer } = require('http'); // use this until certs are created to replace for https
 // const fs = require('fs');
 // const https = require('https');
@@ -26,14 +27,15 @@ const cacheUserTokenInfo = {};
 const authHeadersUserIdIndex = 0;
 const authHeadersTokenIndex = 1;
 const routerNames = {
-  todos: '/todos',
-  users: '/users'
+  todos: 'todos',
+  users: 'users'
 }
 
 module.exports = {
   express,
   router,
   axios,
+  Server,
   createServer, // use this until certs are created to replace for https
   // https,
   // httpsOptions,

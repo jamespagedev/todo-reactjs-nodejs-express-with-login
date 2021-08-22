@@ -1,4 +1,5 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useMemo } from 'react';
+import io from 'socket.io-client';
 import axios from 'axios';
 
 // Components
@@ -12,35 +13,29 @@ import { GlobalContext, proxyServer, backendRoutes, locStorTokName, cloneObjByVa
 const Home = () => {
   // variables
   const { globalBackendData } = useContext(GlobalContext);
+  const headers = useMemo(getHeaders, [globalBackendData.userInfo.id]);
+  const [tempToDosUserId] = useState(globalBackendData.userInfo.id); // ToDo: refactor into admin cms to seperate the toDoUserId vs loggedInUserId.
+  const [socket, setSocket] = useState(null);
   const [todos, setTodos] = useState([]);
   const [deleteModalData, setDeleteModalData] = useState({isOpen: false, id: 0, details: ""});
 
   // functions
-  const getToDos = () => {
-    const headers = { headers: {Authorization: `${globalBackendData.userInfo.id} ${localStorage.getItem(locStorTokName)}`} }
+  function getHeaders(){return { headers: {Authorization: `${globalBackendData.userInfo.id} ${localStorage.getItem(locStorTokName)}`} }}
+  function getToDos(){
     axios.get(`${proxyServer}/${backendRoutes.todos.all}/${globalBackendData.userInfo.id}`, headers)
     .then(res => setTodos(res.data))
     .catch(err => console.log(err)); // <-- todo: create error modal
   }
 
-  const addToDo = (newToDoText) => {
-    const headers = { headers: {Authorization: `${globalBackendData.userInfo.id} ${localStorage.getItem(locStorTokName)}`} }
-    const data = {
-      details: newToDoText
+  async function addToDo(newToDoText){
+    const emitData = {
+      toDoUserId: globalBackendData.userInfo.id,
+      data: {details: newToDoText}
     }
-    axios.post(`${proxyServer}/${backendRoutes.todos.add}/${globalBackendData.userInfo.id}`, data, headers)
-    .then(res => {
-      if(res.data > 0){
-        const copyOfToDos = cloneObjByValue(todos);
-        copyOfToDos.push({id: res.data, details: newToDoText})
-        setTodos(copyOfToDos);
-      }
-    })
-    .catch(err => console.log(err)); // <-- todo: create error modal
+    await socket.emit('add_todo', emitData, (data) => setTodos(data));
   }
 
-  const editToDo = (id, details) => {
-    const headers = { headers: {Authorization: `${globalBackendData.userInfo.id} ${localStorage.getItem(locStorTokName)}`} }
+  function editToDo(id, details){
     const data = { details: details }
     axios.put(`${proxyServer}/${backendRoutes.todos.edit}/${id}`, data, headers)
     .then(res => {
@@ -55,8 +50,7 @@ const Home = () => {
     .catch(err => console.log(err)); // <-- todo: create error modal
   }
 
-  const deleteToDo = (id) => {
-    const headers = { headers: {Authorization: `${globalBackendData.userInfo.id} ${localStorage.getItem(locStorTokName)}`} }
+  function deleteToDo(id){
     axios.delete(`${proxyServer}/${backendRoutes.todos.delete}/${id}`, headers)
     .then(res => {
       if(res.data > 0){
@@ -71,7 +65,26 @@ const Home = () => {
   }
 
   // setup
-  useEffect(getToDos, [globalBackendData.userInfo.id]);
+  useEffect(() => {
+    if(socket){
+      console.log('useEffect');
+      socket.emit('socket_channel', tempToDosUserId)
+      socket.on('update_todos', res => {
+        setTodos(res); // this only updates on everyone else browser except yours
+      });
+    }
+  }, [socket]);
+  useEffect(() => {
+    const newSocket = io(`${proxyServer}`, {
+      extraHeaders: { // note: socket.io lowercases all keynames.
+        requestoruserid: globalBackendData.userInfo.id,
+        token: localStorage.getItem(locStorTokName)
+      }
+    });
+    setSocket(newSocket);
+    return () => newSocket.close();
+  }, [setSocket, globalBackendData.userInfo.id]);
+  useEffect(getToDos, [globalBackendData.userInfo.id, headers]);
 
   return (
     <div className="view">
